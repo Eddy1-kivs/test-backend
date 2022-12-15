@@ -42,24 +42,23 @@ def token_required(f):
 # else the member will be requested to log in
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def register():
     auth = request.form
     register_error = {}
     if auth == 'POST' and 'first_name' in request.form \
             and 'user_name' in request.form and 'password' in \
             request.form and 'email' in request.form:
-        first_name = request.form[StringField('first_name', validators=[DataRequired()])]
-        last_name = request.form[StringField('last_name', validators=[DataRequired()])]
-        phone_number = request.form[StringField('phone_number', validators=[DataRequired()])]
-        username = request.form[StringField('username', validators=[DataRequired()])]
-        email = request.form[StringField('email', validators=[DataRequired()])]
-        password = request.form[StringField('password', validators=[DataRequired()])]
-        created_at = request.form[StringField('created_at', validators=[DataRequired()])]
-        updated_at = request.form[StringField('updated_at', validators=[DataRequired()])]
+        first_name = request.form[StringField('first_name')]
+        last_name = request.form[StringField('last_name')]
+        phone_number = request.form[StringField('phone_number')]
+        username = request.form[StringField('username')]
+        email = request.form[StringField('email')]
+        password = request.form[StringField('password')]
+        created_at = request.form[StringField('created_at')]
+        updated_at = request.form[StringField('updated_at')]
         img = Image.open('filename')
         img.save('filename.png')
-
         location = request.form[StringField('location', validators=[DataRequired()])]
 
         cur = DATABASE.cursor(DATABASE.cursors.DictCursor)
@@ -87,8 +86,7 @@ def register():
             auth = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=
                                                                                                               30)})
             error = jwt.encode({'user': register_error})
-        return jsonify({'error': register_error})
-    return jsonify({'registered': auth})
+    return jsonify({'registered': auth, 'error': register_error})
 
     # return make_response({'www.Authenticate': 'Basic realm="user already exists."'}, 401)
 
@@ -120,8 +118,7 @@ def login():
             login_error['user'] = 'incorrect username/password'
             auth = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
             login_error = jwt.encode({'user': login_error})
-            return jsonify({'login_error': login_error})
-    return jsonify({'login': auth})
+    return jsonify({'login_error': login_error, 'login': auth})
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -250,33 +247,25 @@ def add_payment():
 
 @app.route('/test-overview', methods=['GET', 'POST'])
 def test():
-    test_data = request.form
-    if test_data == 'POST' and 'username' in request.form and 'location' in request.form and 'browser' in request.form and 'test_url' in request.form and 'results' in request.form:
-        username = request.form[StringField('username', validators=[DataRequired()])]
-        location = request.form[StringField('location', validators=[DataRequired()])]
-        browser = request.form[StringField('browser', validators=[DataRequired()])]
-        test_url = request.form[StringField('test_url', validators=[DataRequired()])]
-        results = request.form[StringField('results', validators=[DataRequired()])]
-        cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
-        cur.execute("INSERT INTO tests VALUES (%s,%s,%s,%s,%s,%s)",
-                    (username,
-                     location,
-                     browser,
-                     test_url,
-                     results))
-        DATABASE.commit()
-        flash('Your test has been stored!')
-        token = jwt.encode({'tests': username, 'exp': datetime.datetime.utcnow()})
-        return jsonify({'token': token})
+    test_data = test
+    msg = {}
+    cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
+    post = cur.execute('SELECT * FROM tests WHERE id = ?',
+                       (test_data,)).fetchall()
+    conn.close()
+    if post is None:
+        msg['billing_histories'] = 'No billing history'
+        test_data = jwt.encode({'test': id})
+        msg = jwt.encode({'msg': msg})
     return make_response('test failed', 401, {'www.Authenticate': 'Basic realm'})
 
 
 @app.route('/BillingHistory', methods=['GET', 'POST'])
 def get_post(post_billing):
-    billing_data = post_billing
+    billing_data = get_post
     msg = {}
     cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
-    post = cur.execute('SELECT * FROM tests WHERE id = ?',
+    post = cur.execute('SELECT * FROM billing_histories WHERE id = ?',
                        (post_billing,)).fetchall()
     conn.close()
     if post is None:
