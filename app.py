@@ -6,6 +6,8 @@ import jwt as jwt
 from flask import Flask, request, jsonify, flash, make_response, session, send_file
 import sqlite3
 from wtforms import StringField, validators, SubmitField
+from PIL import Image
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
@@ -40,9 +42,10 @@ def token_required(f):
 # else the member will be requested to log in
 
 
-@app.route('/Register', methods=['POST', 'GET'])
+@app.route('/register', methods=['POST', 'GET'])
 def register():
     auth = request.form
+    register_error = {}
     if auth == 'POST' and 'first_name' in request.form \
             and 'user_name' in request.form and 'password' in \
             request.form and 'email' in request.form:
@@ -54,38 +57,38 @@ def register():
         password = request.form[StringField('password', validators=[DataRequired()])]
         created_at = request.form[StringField('created_at', validators=[DataRequired()])]
         updated_at = request.form[StringField('updated_at', validators=[DataRequired()])]
-        img = request.form[bytes('img')]
+        img = Image.open('filename')
+        img.save('filename.png')
+
         location = request.form[StringField('location', validators=[DataRequired()])]
 
         cur = DATABASE.cursor(DATABASE.cursors.DictCursor)
         DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (username, password))
         user = cur.fetchone()
-
-        error = {}
-
         if user:
-            error['user'] = 'already exists'
+            register_error['user'] = 'already exists'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            error['email'] = 'invalid email address'
+            register_error['email'] = 'invalid email address'
         elif not re.match(r'[A-Za-z0-9]+', username):
-            error['username'] = 'invalid username'
+            register_error['username'] = 'invalid username'
         elif not username or not password or not email:
-            error['user'] = 'fill the form'
+            register_error['user'] = 'fill the form'
         else:
             cur = conn.cursor()
             cur.execute("INSERT INTO users VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         (first_name, last_name,
                          phone_number, username,
-                         email, password, created_at,
+                         email, generate_password_hash(password), created_at,
                          updated_at, img, location))
 
             DATABASE.commit()
             flash('You have successfully registered!')
-            token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=
+
+            auth = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=
                                                                                                               30)})
-            error = jwt.encode({'user': error})
-            return jsonify({'token': token})
-        return jsonify({'error': error})
+            error = jwt.encode({'user': register_error})
+        return jsonify({'error': register_error})
+    return jsonify({'registered': auth})
 
     # return make_response({'www.Authenticate': 'Basic realm="user already exists."'}, 401)
 
@@ -98,7 +101,7 @@ def register():
 #
 
 
-@app.route('/Login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     auth = request.form
     login_error = {}
@@ -115,10 +118,10 @@ def login():
             return 'logged in successfully'
         else:
             login_error['user'] = 'incorrect username/password'
-            token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+            auth = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
             login_error = jwt.encode({'user': login_error})
-            return jsonify({'token': token})
-    return jsonify({'login_error': login_error})
+            return jsonify({'login_error': login_error})
+    return jsonify({'login': auth})
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -269,26 +272,20 @@ def test():
 
 
 @app.route('/BillingHistory', methods=['GET', 'POST'])
-def billing_histories():
-    billing = request.form
-    if billing == 'POST' and 'username' in request.form and 'date' in request.form and 'details' in request.form and 'amount' in request.form and 'download' in request.form:
-        username = request.form[StringField('username', validators=[DataRequired()])]
-        date = request.form[StringField('date', validators=[DataRequired()])]
-        details = request.form[StringField('details', validators=[DataRequired()])]
-        amount = request.form[CurrencyCol('amount', validators=[DataRequired()])]
-        download_file = request.form[SubmitField('download')]
-        cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
-        cur.execute("INSERT INTO billing_histories VALUES (%s,%s,%s,%s,%s,%s)",
-                    (username,
-                     date,
-                     details,
-                     amount,
-                     download_file))
-        DATABASE.commit()
-        flash('Your billing history has been stored!')
-        token = jwt.encode({'billing_histories': username, 'exp': datetime.datetime})
+def get_post(post_billing):
+    billing_data = post_billing
+    msg = {}
+    cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
+    post = cur.execute('SELECT * FROM tests WHERE id = ?',
+                       (post_billing,)).fetchall()
+    conn.close()
+    if post is None:
+        msg['billing_histories'] = 'No billing history'
+
+        token = jwt.encode({'billing_data': id, 'exp': datetime.datetime})
+        msg = jwt.encode({'billing_histories': msg})
         return jsonify({'token': token})
-    return make_response({'www.billing': ''})
+    return jsonify({'msg': msg})
 
 
 @app.route('/', methods=['GET', 'POST'])
