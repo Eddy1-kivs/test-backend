@@ -9,7 +9,7 @@ from datetime import datetime
 app = Flask(__name__)
 login = Blueprint('login', __name__)
 
-DATABASE = TestLoad.sqlite
+
 
 
 class User(DATABASE.tables):

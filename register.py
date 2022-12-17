@@ -1,12 +1,11 @@
 from flask import Flask, request, Blueprint, jsonify
 from datetime import datetime
 from werkzeug.security import generate_password_hash
-# from app import DATABASE
 
 app = Flask(__name__)
 new = Blueprint('new', __name__)
 
-db = TestLoad.sqlite
+
 
 
 class Users:
