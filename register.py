@@ -7,9 +7,6 @@ new = Blueprint('new', __name__)
 
 
 class Users:
-    # cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
-    # DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))
-    # users = cur.fetchone()
 
     def __init__(self, first_name, last_name,
                  phone_number, username, email,
@@ -48,14 +45,17 @@ class Users:
         return dict(id=self.id, username=self.username)
 
 
-@app.route('/', methods=['GET', 'POST'])
+# @app.route('/', methods=['GET', 'POST'])
+# def register():
+#     data = request.get_json()
+#     user = Users(**data)
+#     cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
+#     DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))
+#     users = cur.fetchone()
+#     return jsonify(user.to_dict()), 201
+@app.route('/')
 def register():
-    data = request.get_json()
-    user = Users(**data)
-    cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
-    DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))
-    users = cur.fetchone()
-    return jsonify(user.to_dict()), 201
+    return jsonify({'user.to_dict'})
 
 
 if __name__ == '__main__':
