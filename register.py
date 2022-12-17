@@ -53,7 +53,7 @@ class Users:
 #     DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))
 #     users = cur.fetchone()
 #     return jsonify(user.to_dict()), 201
-@app.route('/')
+@app.route('/register')
 def register():
     data = request.get_json()
     user = Users(**data)
