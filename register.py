@@ -1,9 +1,14 @@
-from flask import Flask, request, Blueprint, jsonify
+from flask import Flask, request, Blueprint, jsonify, current_app
 from datetime import datetime
+from functools import wraps
+import jwt
 from werkzeug.security import generate_password_hash
+from app import api as api
 
 app = Flask(__name__)
+app.config.from_object(__name__)
 new = Blueprint('new', __name__)
+
 
 
 class Users:
@@ -42,7 +47,7 @@ class Users:
             return None
 
     def to_dict(self):
-        return dict(id=self.id, username=self.username)
+        return dict(**data)
 
 
 # @app.route('/', methods=['GET', 'POST'])
@@ -53,14 +58,22 @@ class Users:
 #     DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))
 #     users = cur.fetchone()
 #     return jsonify(user.to_dict()), 201
-@app.route('/register')
+@app.route('/', methods=['POST', 'GET'])
 def register():
     data = request.get_json()
     user = Users(**data)
-    return jsonify({'user.to_dict'})
+    cur = conn.cursor()
+    cur.execute("INSERT INTO users VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                (first_name, last_name,
+                 phone_number, username,
+                 email, password, created_at,
+                 updated_at, img, location))
+
+    db.commit()
+    return jsonify({'data'})
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    api.run(debug=True, host='0.0.0.0', port=8080)
 
 
