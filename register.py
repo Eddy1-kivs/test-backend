@@ -6,8 +6,6 @@ app = Flask(__name__)
 new = Blueprint('new', __name__)
 
 
-
-
 class Users:
     # cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
     # DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))

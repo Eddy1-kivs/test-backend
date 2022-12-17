@@ -10,9 +10,7 @@ app = Flask(__name__)
 login = Blueprint('login', __name__)
 
 
-
-
-class User(DATABASE.tables):
+class User:
 
     # cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
     # DATABASE.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))
