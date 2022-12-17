@@ -55,6 +55,8 @@ class Users:
 #     return jsonify(user.to_dict()), 201
 @app.route('/')
 def register():
+    data = request.get_json()
+    user = Users(**data)
     return jsonify({'user.to_dict'})
 
 
