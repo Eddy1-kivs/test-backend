@@ -1,4 +1,7 @@
-from app import *
+from flask import Flask, request, jsonify, session, Blueprint
+
+app = Flask(__name__)
+pay = Blueprint('pay', __name__)
 
 
 class CurrencyCol:
@@ -51,3 +54,6 @@ def add_payment():
         token = jwt.encode({'payments': username, 'exp': datetime.datetime.utcnow()})
         return jsonify({'token': token})
     return make_response('add payment failed', 401, {'www.Authenticate': 'Basic realm'})
+
+
+app.run(debug=True, host='0.0.0.0', port=8000)

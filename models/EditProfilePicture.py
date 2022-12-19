@@ -1,4 +1,7 @@
-from app import *
+from flask import Flask, request, jsonify, session, Blueprint
+
+app = Flask(__name__)
+profile_edit = Blueprint('profile_edit', __name__)
 
 
 @app.route('/EditProfilePicture', methods=['GET', 'POST'])
@@ -14,3 +17,6 @@ def change_profile(profile_change):
         token = jwt.encode({'user': profile_change['username', 'first_name', 'last_name', 'phone_number']})
         return jsonify({'token': token})
     return make_response('profile update failed', 401, {'www.Authenticate': 'Basic realm'})
+
+
+app.run(debug=True, host='0.0.0.0', port=8000)

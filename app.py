@@ -1,16 +1,118 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session, Blueprint
 import sqlite3
 import os
-import psycopg2
+# import psycopg2
 from dotenv import load_dotenv
+from models.billingHistory import billing
+from models.download import download_file
+from models.EditEmail import email_edit
+from models.EditPassword import password_change
+from models.EditProfilePicture import profile_edit
+from models.logout import out
+from models.payment import pay
+from models.subscription import subs
+from models.TestOverview import overview
+from auth.login import sign_in
 # from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
 
 app = Flask(__name__)
 url = os.getenv('DATABASE_URL')
-connection = psycopg2.connect(url)
+# connection = psycopg2.connect(url)
+conn = sqlite3.connect('TestLoad.sqlite')
+conn.close()
+db = 'TestLoad.sqlite'
 
+app.register_blueprint(billing)
+app.register_blueprint(download_file)
+app.register_blueprint(email_edit)
+app.register_blueprint(password_change)
+app.register_blueprint(profile_edit)
+app.register_blueprint(out)
+app.register_blueprint(pay)
+app.register_blueprint(subs)
+app.register_blueprint(overview)
+app.register_blueprint(sign_in)
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.args.get('token')
+        if not token:
+            return jsonify({'message': 'Token is missing'}), 403
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+        except:
+            return jsonify({'message': 'Token is invalid'}), 403
+        return f(*args, **kwargs)
+
+    return decorated
+
+
+# @app.route('/')
+@app.route('/register', methods =['GET', 'POST'])
+def register():
+    data = request.get_json()
+    if request.get_json() == 'POST':
+        first_name = [StringField('first_name')]
+        last_name = [StringField('last_name')]
+        phone_number = [StringField('phone_number')]
+        username = [StringField('username')]
+        email = [StringField('email')]
+        password = ['password']
+        location = [StringField('location')]
+        img = ['img']
+        created_at = [StringField('created_at')]
+        updated_at = [StringField('updated_at')]
+        cur = db.cursor(db.cursors.DictCursor)
+        db.execute('SELECT * FROM main.users WHERE users.username =%s AND password = %s', (username, password))
+        user = cur.fetchone()
+
+        error = {}
+
+        if user:
+            error['user'] = 'already exists'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            error['email'] = 'invalid email address'
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            error['username'] = 'invalid username'
+        elif not username or not password or not email:
+            error['user'] = 'fill the form'
+        else:
+            cur = conn.cursor()
+            cur.execute("INSERT INTO main.users VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",)
+
+            db.commit()
+            token = jwt.encode({'user': data})
+            error = jwt.encode({'user': error})
+        return jsonify({'token': token})
+        # return jsonify({"username": username, "message": f"user {username} created."}), 201
+    return jsonify({'error': error})
+
+
+@app.route('/')
+@app.route('/Login', methods=['GET', 'POST'])
+def login():
+    auth = request.form
+    login_error = {}
+    if auth == 'POST' and 'user_name' in request.form and 'password' in request.form:
+        user_name = request.form[StringField('username')]
+        password = request.form[StringField('password')]
+        cur = db.connection.cursor(db.cursors.DictCursor)
+        db.execute('SELECT * FROM main.users WHERE users.username =%s AND password = %s', (user_name, password))
+        users = cur.fetchone()
+        if users:
+            session['loggedin'] = True
+            session['id'] = users['id']
+            session['user_name'] = users['user_name']
+        else:
+            login_error['user'] = 'incorrect username/password'
+            token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+            login_error = jwt.encode({'user': login_error})
+            return jsonify({"token": token})
+    return jsonify({"login_error": login_error})
 
 # app.config.from_prefixed_env()
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////TestLoad.sqlite'
@@ -119,7 +221,5 @@ connection = psycopg2.connect(url)
 #         'exp': datetime.utcnow() + datetime.timedelta(hours=1)},
 #         current_app.config['SECRET_KEY'])
 #     return jsonify({'token': token.decode('UTF-8')})
-
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8000)
+# if __name__ == '__main__':
+app.run(debug=True, host='0.0.0.0', port=8000)
