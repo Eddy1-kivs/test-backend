@@ -1,10 +1,9 @@
 from flask import Flask, request, jsonify, session, Blueprint
 
-app = Flask(__name__)
 email_edit = Blueprint('email_edit', __name__)
 
 
-@app.route('/EditEmailModal', methods=['GET', 'POST'])
+@email_edit.route('/EditEmailModal', methods=['GET', 'POST'])
 def change_email(email_change):
     email = request.form
     if request.method == 'POST':
@@ -17,5 +16,3 @@ def change_email(email_change):
         return jsonify({'token': token})
     return make_response('email update failed', 401, {'www.Authenticate': 'Basic realm'})
 
-
-app.run(debug=True, host='0.0.0.0', port=8000)

@@ -1,10 +1,9 @@
 from flask import Flask, request, jsonify, session, Blueprint
 
-app = Flask(__name__)
 billing = Blueprint('billing', __name__)
 
 
-@app.route('/BillingHistory', methods=['GET', 'POST'])
+@billing.route('/BillingHistory', methods=['GET', 'POST'])
 def get_post(post_billing):
     billing_data = get_post
     msg = {}
@@ -20,5 +19,3 @@ def get_post(post_billing):
         return jsonify({'token': token})
     return jsonify({'msg': msg})
 
-
-app.run(debug=True, host='0.0.0.0', port=8000)

@@ -1,10 +1,9 @@
 from flask import Flask, request, jsonify, session, Blueprint
 
-app = Flask(__name__)
 overview = Blueprint('overview', __name__)
 
 
-@app.route('/test-overview', methods=['GET', 'POST'])
+@overview.route('/test-overview', methods=['GET', 'POST'])
 def test():
     test_data = test
     msg = {}
@@ -19,4 +18,3 @@ def test():
     return make_response('test failed', 401, {'www.Authenticate': 'Basic realm'})
 
 
-app.run(debug=True, host='0.0.0.0', port=8000)

@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, session, Blueprint
 
-app = Flask(__name__)
 pay = Blueprint('pay', __name__)
 
 
@@ -33,7 +32,7 @@ class Number:
         return True
 
 
-@app.route('/PaymentMethod', methods=['GET', 'POST'])
+@pay.route('/PaymentMethod', methods=['GET', 'POST'])
 def add_payment():
     add = request.form
     if add == 'POST' and 'username' in request.form and 'card_number' in request.form and 'card_holder_name' in request.form and 'expiration_date' in request.form and 'cvv' in request.form:
@@ -49,11 +48,9 @@ def add_payment():
                      card_holder_name,
                      expiration_date,
                      cvv))
-        DATABASE.commit()
+        db.commit()
         flash('You have successfully added payment!')
         token = jwt.encode({'payments': username, 'exp': datetime.datetime.utcnow()})
         return jsonify({'token': token})
     return make_response('add payment failed', 401, {'www.Authenticate': 'Basic realm'})
 
-
-app.run(debug=True, host='0.0.0.0', port=8000)

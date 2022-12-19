@@ -1,12 +1,25 @@
 from flask import Flask, request, jsonify, session, Blueprint
+from config.database import db
 
-
-app = Flask(__name__)
 sign_in = Blueprint('sign_in', __name__)
 
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.args.get('token')
+        if not token:
+            return jsonify({'message': 'Token is missing'}), 403
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+        except:
+            return jsonify({'message': 'Token is invalid'}), 403
+        return f(*args, **kwargs)
 
-@app.route('/')
-@app.route('/Login', methods=['GET', 'POST'])
+    return decorated
+
+
+@sign_in.route('/')
+@sign_in.route('/login', methods=['GET', 'POST'])
 def login():
     auth = request.form
     login_error = {}
@@ -27,5 +40,3 @@ def login():
             return jsonify({"token": token})
     return jsonify({"login_error": login_error})
 
-
-app.run(debug=True, host='0.0.0.0', port=8000)
