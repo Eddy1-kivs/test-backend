@@ -1,7 +1,10 @@
-from flask import Flask, request, jsonify, session, Blueprint
-from config.database import db
+from flask import Flask, request, jsonify, session, Blueprint, make_response
+from config.database import *
+import jwt
+import datetime
 
 sign_in = Blueprint('sign_in', __name__)
+
 
 def token_required(f):
     @wraps(f)
@@ -21,11 +24,11 @@ def token_required(f):
 @sign_in.route('/')
 @sign_in.route('/login', methods=['GET', 'POST'])
 def login():
-    auth = request.form
+    auth = request.authorization
     login_error = {}
     if auth == 'POST' and 'user_name' in request.form and 'password' in request.form:
-        user_name = request.form[StringField('username')]
-        password = request.form[StringField('password')]
+        username = request.authorization[StringField('username')]
+        password = request.authorization[StringField('password')]
         cur = db.connection.cursor(db.cursors.DictCursor)
         db.execute('SELECT * FROM main.users WHERE users.username =%s AND password = %s', (user_name, password))
         users = cur.fetchone()
@@ -35,8 +38,7 @@ def login():
             session['user_name'] = users['user_name']
         else:
             login_error['user'] = 'incorrect username/password'
-            token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
-            login_error = jwt.encode({'user': login_error})
-            return jsonify({"token": token})
-    return jsonify({"login_error": login_error})
+            return make_response(login_error, 401, {'www.Authenticate': 'Basic realm="login_required"'})
+        auth = jwt.encode({'user': auth, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'], algorithm='HS256')
+    return jsonify({'token': auth})
 

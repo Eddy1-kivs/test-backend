@@ -2,11 +2,11 @@ from flask import Flask, request, jsonify, session, Blueprint
 from config.database import db
 
 
-sign_in = Blueprint('sign_in', __name__)
+get_started = Blueprint('get_started', __name__)
 
 
-@sign_in.route('/')
-@sign_in.route('/register', methods =['GET', 'POST'])
+@get_started.route('/')
+@get_started.route('/register', methods =['GET', 'POST'])
 def register():
     data = request.get_json()
     if request.get_json() == 'POST':

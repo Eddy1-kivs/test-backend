@@ -7,6 +7,7 @@ import sqlite3
 load_dotenv()
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret_key'
 url = os.getenv('DATABASE_URL')
 # connection = psycopg2.connect(url)
 

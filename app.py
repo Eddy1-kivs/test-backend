@@ -1,7 +1,7 @@
 from flask import Flask
-import sqlite3
 import os
 from dotenv import load_dotenv
+from auth.register import get_started
 from models.billingHistory import billing
 from models.download import download_file
 from models.EditEmail import email_edit
@@ -18,7 +18,7 @@ load_dotenv()
 app = Flask(__name__)
 url = os.getenv('DATABASE_URL')
 # connection = psycopg2.connect(url)
-
+# app.register_blueprint(get_started)
 app.register_blueprint(sign_in)
 app.register_blueprint(billing)
 app.register_blueprint(download_file)
