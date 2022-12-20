@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3edddf14-701b-47cd-b2a9-2e1a98572188" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/views/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/login.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/register.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/register.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/EditEmail.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/EditEmail.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/EditPassword.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/EditPassword.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/EditProfilePicture.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/EditProfilePicture.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/TestOverview.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/TestOverview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/TestLoad.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/billingHistory.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/billingHistory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/download.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/download.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/logout.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/logout.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/payment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/subscription.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/subscription.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -242,7 +227,7 @@
       <workItem from="1671356538065" duration="8795000" />
       <workItem from="1671385123463" duration="14137000" />
       <workItem from="1671473153706" duration="9191000" />
-      <workItem from="1671547838413" duration="6735000" />
+      <workItem from="1671547838413" duration="8128000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1671031736508</created>
@@ -412,7 +397,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671548131248</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="update">
+      <created>1671557912591</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1671557912591</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -458,12 +450,12 @@
     <SUITE FILE_PATH="coverage/test_backend$app__1_.coverage" NAME="app (1) Coverage Results" MODIFIED="1671356195450" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test_backend$Flask__login_py_.coverage" NAME="Flask (login.py) Coverage Results" MODIFIED="1671283209062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test_backend$test_backend.coverage" NAME="test-backend Coverage Results" MODIFIED="1671555086366" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/test_backend$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1671555825481" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/test_backend$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1671557879679" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test_backend$Database.coverage" NAME="Database Coverage Results" MODIFIED="1671202807564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Database" />
     <SUITE FILE_PATH="coverage/test_backend$api.coverage" NAME="api Coverage Results" MODIFIED="1671285988045" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test_backend$app.coverage" NAME="app Coverage Results" MODIFIED="1671285937762" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../Test_Load/Backend" />
     <SUITE FILE_PATH="coverage/test_backend$database.coverage" NAME="database Coverage Results" MODIFIED="1671474086040" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/config" />
-    <SUITE FILE_PATH="coverage/test_backend$register.coverage" NAME="register Coverage Results" MODIFIED="1671557665167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/auth" />
+    <SUITE FILE_PATH="coverage/test_backend$register.coverage" NAME="register Coverage Results" MODIFIED="1671557795434" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/auth" />
     <SUITE FILE_PATH="coverage/test_backend$Flask__auth_login_py_.coverage" NAME="Flask (auth/login.py) Coverage Results" MODIFIED="1671470589839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

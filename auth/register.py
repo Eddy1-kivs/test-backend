@@ -13,6 +13,12 @@ import traceback
 get_started = Blueprint('get_started', __name__)
 
 
+def convert_to_binary_data(filename):
+    with open(filename, 'rb') as file:
+        blob_data = file.read()
+    return blob_data
+
+
 @get_started.route('/')
 @get_started.route("/register", methods=["GET", "POST"])
 def signup():
@@ -26,7 +32,7 @@ def signup():
     email = [StringField('email')]
     password = ['password']
     location = [StringField('location')]
-    img = ['img']
+    img = convert_to_binary_data(['img'])
     created_at = [StringField('created_at')]
     updated_at = [StringField('updated_at')]
 
