@@ -22,13 +22,13 @@ def token_required(f):
 
 
 @sign_in.route('/')
-@sign_in.route('/login', methods=['GET', 'POST'])
+@sign_in.route('/login', methods=['POST', 'GET'])
 def login():
-    auth = request.authorization
+    auth = request.form.get('username')
     login_error = {}
     if auth == 'POST' and 'user_name' in request.form and 'password' in request.form:
-        username = request.authorization[StringField('username')]
-        password = request.authorization[StringField('password')]
+        username = request.form[StringField('username')]
+        password = request.form[StringField('password')]
         cur = db.connection.cursor(db.cursors.DictCursor)
         db.execute('SELECT * FROM main.users WHERE users.username =%s AND password = %s', (user_name, password))
         users = cur.fetchone()
