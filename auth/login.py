@@ -38,7 +38,7 @@ def login():
             session['user_name'] = users['user_name']
         else:
             login_error['user'] = 'incorrect username/password'
-            return make_response(login_error, 401, {'www.Authenticate': 'Basic realm="login_required"'})
+            return jsonify({'login_error': login_error}), 401
         auth = jwt.encode({'user': auth, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'], algorithm='HS256')
     return jsonify({'token': auth})
 
