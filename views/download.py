@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, session, Blueprint
 download_file = Blueprint('download_file', __name__)
 
 
-@download_file.route('/', methods=['GET', 'POST'])
+@download_file.route('/download', methods=['GET', 'POST'])
 def download():
     p = 'file'
     if request.method == 'POST':
