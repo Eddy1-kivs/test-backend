@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, jsonify, session, Blueprint
 from config.database import db
 from flask_jwt_extended import (
@@ -9,7 +10,7 @@ import time
 from logzero import logger
 import traceback
 
-
+# app = Flask(__name__)
 get_started = Blueprint('get_started', __name__)
 
 
@@ -22,30 +23,30 @@ def convert_to_binary_data(filename):
 @get_started.route('/')
 @get_started.route("/register", methods=["GET", "POST"])
 def signup():
-    if not request.is_json:
+    if not request.get_json():
         return jsonify({"message": "Missing JSON in request"}), 400
     data = request.get_json()
-    first_name = [StringField('first_name')]
-    last_name = [StringField('last_name')]
-    phone_number = [StringField('phone_number')]
-    username = [StringField('username')]
-    email = [StringField('email')]
-    password = ['password']
-    location = [StringField('location')]
-    img = convert_to_binary_data(['img'])
-    created_at = [StringField('created_at')]
-    updated_at = [StringField('updated_at')]
+    first_name = data[StringField('first_name', validators=[InputRequired()])]
+    last_name = data[StringField('last_name', validators=[InputRequired()])]
+    phone_number = data[StringField('phone_number', validators=[InputRequired()])]
+    username = data[StringField('username', validators=[InputRequired()])]
+    email = data[StringField('email', validators=[InputRequired()])]
+    password = data[StringField('password', validators=[InputRequired()])]
+    location = data[StringField('location', validators=[InputRequired()])]
+    img = data(convert_to_binary_data(['img']))
+    created_at = data[StringField('created_at', validators=[InputRequired()])]
+    updated_at = data[StringField('updated_at', validators=[InputRequired()])]
 
-    print(f'signup request: username={username}, password={password}, password_conf={password_conf}')
+    print(f'signup request: username={username}, password={password}')
 
-    if username and username.encode().isalnum() and password != password_conf:
-        return jsonify({"mode": "signup", "status": "error", "message": "Format does not match"}), 400
+    if username and username.encode().isalnum():
+        return json.dumps({"mode": "signup", "status": "error", "message": "Format does not match"}), 400
 
     cur = db.connection.cursor(db.cursors.DictCursor)
     db.execute('SELECT * FROM main.users  WHERE username=?;')
     users = cur.fetchone()
     if db[username]:
-        return jsonify({"mode": "signup", "status": "error", "message": "This username cannot be used since it already exist"}), 400
+        return json.dumps({"mode": "signup", "status": "error", "message": "This username cannot be used since it already exist"}), 400
 
     salt = bcrypt.gensalt(rounds=10, prefix=b"2a")
     hashed_pass = bcrypt.hashpw(password.encode(), salt).decode()
@@ -53,9 +54,11 @@ def signup():
     cur.execute("INSERT INTO main.users VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",)
     db.commit()
     db(username, hashed_pass)
-    return jsonify({"mode": "signup", "status": "success", "message": "Completed"}), 200
+    return json.dumps({"mode": "signup", "status": "success", "message": "Completed"}), 200
 
 
+# if __name__ == "__main__":
+#     app.run(debug=True, host="0.0.0.0", port=5000)
 # @get_started.route('/')
 # @get_started.route('/register', methods =['GET', 'POST'])
 # def register():

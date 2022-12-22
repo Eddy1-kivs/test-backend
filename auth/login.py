@@ -17,7 +17,9 @@ sign_in = Blueprint('sign_in', __name__)
 @sign_in.route('/')
 @sign_in.route("/login", methods=["POST"])
 def login():
-    username = request.json.get("username", None)
+    if not request.is_json:
+        return jsonify({"message": "Missing JSON in request"}), 400
+    username = request.json_get("username", None)
     password = request.json.get("password", None)
     if not username or not password:
         return jsonify({"message": "Wrong username or password"}), 400
