@@ -10,10 +10,11 @@ from views.EditEmail import email_edit
 from views.EditPassword import password_change
 from views.EditProfilePicture import profile_edit
 from views.logout import out
-from views.payment import pay
+from views.add_payments import pay
 from views.subscription import subs
 from views.TestOverview import overview
 from auth.login import sign_in
+from views.payments import payments
 
 load_dotenv()
 
@@ -22,18 +23,21 @@ jwt = JWTManager(app)
 CORS(app)
 app.config['SECRET_KEY'] = 'hello'
 url = os.getenv('DATABASE_URL')
+
 # connection = psycopg2.connect(url)
+
 app.register_blueprint(get_started)
 app.register_blueprint(sign_in)
-app.register_blueprint(billing)
-app.register_blueprint(download_file)
-app.register_blueprint(email_edit)
-app.register_blueprint(password_change)
-app.register_blueprint(profile_edit)
-app.register_blueprint(out)
-app.register_blueprint(pay)
-app.register_blueprint(subs)
-app.register_blueprint(overview)
+# app.register_blueprint(billing)
+# app.register_blueprint(download_file)
+# app.register_blueprint(email_edit)
+# app.register_blueprint(password_change)
+# app.register_blueprint(profile_edit)
+# app.register_blueprint(out)
+# app.register_blueprint(pay)
+# app.register_blueprint(subs)
+# app.register_blueprint(overview)
+# app.register_blueprint(payments)
 
 
 if __name__ == "__main__":

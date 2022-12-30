@@ -1,4 +1,6 @@
-from flask import Flask, request, jsonify, session, Blueprint
+from flask import Flask, jsonify, Blueprint, json
+from config.database import db
+
 
 overview = Blueprint('overview', __name__)
 
@@ -7,14 +9,14 @@ overview = Blueprint('overview', __name__)
 def test():
     test_data = test
     msg = {}
-    cur = db.connection.cursor(DATABASE.cursors.DictCursor)
+    cur = db.connection.cursor(db.cursors.DictCursor)
     post = cur.execute('SELECT * FROM tests WHERE id = ?',
                        (test_data,)).fetchall()
-    conn.close()
+    cur.close()
     if post is None:
         msg['billing_histories'] = 'No billing history'
-        test_data = jwt.encode({'test': id})
-        msg = jwt.encode({'msg': msg})
+        test_data = json.encode({'test': id})
+        msg = json.encode({'msg': msg})
     return make_response('test failed', 401, {'www.Authenticate': 'Basic realm'})
 
 
