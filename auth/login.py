@@ -1,118 +1,34 @@
-from flask import Flask, request, jsonify, session, Blueprint, make_response
-from config.database import *
-import jwt
-from wtforms import StringField
-from wtforms.validators import DataRequired, InputRequired
-from flask_restful import Resource, Api
-import datetime
-# from flask_jwt_extended import (
-#     jwt_required, create_access_token,
-#     get_jwt_identity, get_jti
-# )
-# import bcrypt
-# import time
-# from logzero import logger
-# import traceback
+from flask import Flask, request, jsonify, session, Blueprint, redirect
+import sqlite3
 
 sign_in = Blueprint('sign_in', __name__)
-api = Api(sign_in)
 
 
-@sign_in.route('/login', methods=['GET'])
+def get_db():
+    conn = sqlite3.connect('config/TestLoad.sqlite')
+    return conn
+
+
+@sign_in.route("/login", methods=["GET", 'POST'])
 def login():
-    auth = request.form
-    login_error = {}
-    if auth == 'POST' and 'user_name' in request.form and 'password' in request.form:
-        user_name = request.form[StringField('username', validators=[DataRequired()])]
-        password = request.form[StringField('password', validators=[DataRequired()])]
-        cur = db.connection.cursor(db.cursors.DictCursor)
-        db.execute('SELECT * FROM users WHERE users.username =%s AND password = %s', (user_name, password))
-        users = cur.fetchone()
-        if users:
-            session['loggedin'] = True
-            session['id'] = users['id']
-            session['user_name'] = users['user_name']
-            return make_response({'logged in successfully'}, 200)
-        else:
-            login_error['user'] = 'incorrect username/password'
-            token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
-            login_error = jwt.encode({'user': login_error})
-            return jsonify({'login_error': login_error})
-    return jsonify({'token': auth})
+    errors = {}
+    requiredFields = ['username', 'password']
+    for field in requiredFields:
+        if field not in request.form:
+            errors[field] = 'This field is required'
 
+    defaultValue = ''
+    username = request.form.get('username', defaultValue)
+    password = request.form.get('password', defaultValue)
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password))
+    user = cursor.fetchone()
+    if user is None:
+        errors['username'] = 'Invalid username or password'
+        return {'errors': errors}
+    else:
+        # log the user in and redirect to the home page
+        return redirect('/home')
 
-# @sign_in.route('/')
-# @sign_in.route("/login", methods=["POST"])
-# def login():
-#     if not request.is_json:
-#         return jsonify({"message": "Missing JSON in request"}), 400
-#     username = request.json_get("username", None)
-#     password = request.json.get("password", None)
-#     if not username or not password:
-#         return jsonify({"message": "Wrong username or password"}), 400
-#
-#     con = db.cursor(db)
-#     cur = con.cursor()
-#     cur.execute('SELECT * FROM main.users WHERE users.username =%s AND password = %s', (user_name, password))
-#     users = cur.fetchone()
-#     try:
-#         user = db[username]
-#         logger.debug(f'username={username}')
-#         if not user:
-#             return jsonify({"message": "Bad username or password"}), 401
-#
-#         logger.debug(f'{user}')
-#         if bcrypt.checkpw(password.encode(), user["password"].encode()):
-#             logger.debug(f'{user["username"]}')
-#             db.execute('UPDATE main.users SET password = %s WHERE username = %s', (password, user["username"]))
-#             db.commit()
-#             logger.debug(f'{user["username"]}')
-#             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-#         else:
-#             return jsonify({"message": "Bad username or password"}), 401
-#     except Exception as e:
-#         logger.error(traceback.format_exc())
-#         return jsonify({"message": "An error occurred"}), 500
-#
-#     access_token = create_access_token(identity=user["user_id"])
-#     db.execute('UPDATE main.users SET password = %s WHERE username = %s', (password, user["username"]))
-#     db.commit()
-#     get_jti(access_token), username
-#     return jsonify(access_token=access_token), 200
-
-# def token_required(f):
-#     @wraps(f)
-#     def decorated(*args, **kwargs):
-#         token = request.args.get('token')
-#         if not token:
-#             return jsonify({'message': 'Token is missing'}), 403
-#         try:
-#             data = jwt.decode(token, app.config['SECRET_KEY'])
-#         except:
-#             return jsonify({'message': 'Token is invalid'}), 403
-#         return f(*args, **kwargs)
-#
-#     return decorated
-
-
-# @sign_in.route('/')
-# @sign_in.route('/login', methods=['POST', 'GET'])
-# def login():
-#     auth = request.form.get('username')
-#     login_error = {}
-#     if auth == 'POST' and 'user_name' in request.form and 'password' in request.form:
-#         username = request.form[StringField('username')]
-#         password = request.form[StringField('password')]
-#         cur = db.connection.cursor(db.cursors.DictCursor)
-#         db.execute('SELECT * FROM main.users WHERE users.username =%s AND password = %s', (user_name, password))
-#         users = cur.fetchone()
-#         if users:
-#             session['loggedin'] = True
-#             session['id'] = users['id']
-#             session['user_name'] = users['user_name']
-#         else:
-#             login_error['user'] = 'incorrect username/password'
-#             return jsonify({'login_error': login_error}), 401
-#         auth = jwt.encode({'user': auth, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'], algorithm='HS256')
-#     return jsonify({'token': auth})
 
