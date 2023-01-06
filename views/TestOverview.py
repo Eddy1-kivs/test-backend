@@ -1,22 +1,32 @@
-from flask import Flask, jsonify, Blueprint, json
-from config.database import db
-
+import sqlite3
+from flask import Blueprint, request, jsonify
 
 overview = Blueprint('overview', __name__)
 
 
-@overview.route('/test-overview', methods=['GET', 'POST'])
+def get_db():
+    conn = sqlite3.connect('config/TestLoad.sqlite')
+    return conn
+
+
+@overview.route('/test-overview', methods=['GET'])
 def test():
-    test_data = test
-    msg = {}
-    cur = db.connection.cursor(db.cursors.DictCursor)
-    post = cur.execute('SELECT * FROM tests WHERE id = ?',
-                       (test_data,)).fetchall()
-    cur.close()
-    if post is None:
-        msg['billing_histories'] = 'No billing history'
-        test_data = json.encode({'test': id})
-        msg = json.encode({'msg': msg})
-    return make_response('test failed', 401, {'www.Authenticate': 'Basic realm'})
+    username = request.args.get('username')
+    password = request.args.get('password')
+
+    if not username or not password:
+        return jsonify({'error': 'Missing username or password'}), 400
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM tests
+        WHERE username=? AND location=? AND browser AND test_url AND results
+    ''', (username, password))
+    tests = cursor.fetchall()
+    if not tests:
+        return jsonify({'tests': 'No test'})
+
+    return jsonify({'tests': tests})
 
 

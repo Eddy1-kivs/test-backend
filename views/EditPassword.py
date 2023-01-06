@@ -1,19 +1,35 @@
-from flask import Flask, request, jsonify, session, Blueprint
+import sqlite3
+from flask import Blueprint, request, jsonify
 
-password_change = Blueprint('password_change', __name__)
+change_password = Blueprint('change_password', __name__)
 
 
-@password_change.route('/EditEmailModal', methods=['GET', 'POST'])
-def change_password(password_change_now):
-    password = request.form
-    if request.method == 'POST':
-        old_password = request.form['old_password']
-        new_password = request.form['new_password']
-        cur = db.connection.cursor(db.cursors.DictCursor)
-        db.execute('UPDATE users SET email = %s  WHERE email = %s', email)
-        db.commit()
-        flash('Your email address has been updated successfully')
-        token = jwt.encode({'user': email.email})
-        return jsonify({'token': token})
-    return make_response('email update failed', 401, {'www.Authenticate': 'Basic realm'})
+def get_db():
+    conn = sqlite3.connect('config/TestLoad.sqlite')
+    return conn
 
+
+@change_password.route('/change-password', methods=['POST'])
+def change_your_password():
+    username = request.form.get('username')
+    old_password = request.form.get('old_password')
+    new_password = request.form.get('new_password')
+
+    if not username or not old_password or not new_password:
+        return jsonify({'error': 'Missing username, old password, or new password'}), 400
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM users WHERE username=? AND password=?
+    ''', (username, old_password))
+    user = cursor.fetchone()
+    if not user:
+        return jsonify({'error': 'Invalid username or password'}), 401
+
+    cursor.execute('''
+        UPDATE users SET password=? WHERE username=?
+    ''', (new_password, username))
+    conn.commit()
+
+    return jsonify({'success': True})

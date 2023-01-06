@@ -1,20 +1,44 @@
-from flask import Flask, request, jsonify, session, Blueprint
+import sqlite3
+from flask import Blueprint, request, jsonify
 
-profile_edit = Blueprint('profile_edit', __name__)
-
-
-@profile_edit.route('/EditProfilePicture', methods=['GET', 'POST'])
-def change_profile(profile_change):
-    img = request.form
-    if request.method == 'POST':
-        img = request.form[bytes('profile')]
-        cur = DATABASE.connection.cursor(DATABASE.cursors.DictCursor)
-        DATABASE.execute(
-            'UPDATE users SET username = %s, first_name = %s, last_name = %s, phone_number = %s  WHERE username = ?')
-        DATABASE.commit()
-        flash('Your profile has been updated successfully')
-        token = jwt.encode({'user': profile_change['username', 'first_name', 'last_name', 'phone_number']})
-        return jsonify({'token': token})
-    return make_response('profile update failed', 401, {'www.Authenticate': 'Basic realm'})
+change_profile_image = Blueprint('change_profile_image', __name__)
 
 
+def get_db():
+    conn = sqlite3.connect('config/TestLoad.sqlite')
+    return conn
+
+
+@change_profile_image.route('/change-profile-image', methods=['POST'])
+def change_profile_user_image():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    image = request.files.get('image')
+
+    if not username or not password or not image:
+        return jsonify({'error': 'Missing username, password, or image'}), 400
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM users WHERE username=? AND password=?
+    ''', (username, password))
+    user = cursor.fetchone()
+    if not user:
+        return jsonify({'error': 'Invalid username or password'}), 401
+
+    # Save the image to disk and retrieve the image file path
+    image_file_path = save_image(image)
+
+    cursor.execute('''
+        UPDATE users SET img=? WHERE username=?
+    ''', (image_file_path, username))
+    conn.commit()
+
+    return jsonify({'success': True})
+
+
+def save_image(image):
+    # Save the image to disk and return the file path
+    # ...
+    return image_file_path
