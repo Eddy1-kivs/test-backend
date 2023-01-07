@@ -1,5 +1,7 @@
 import sqlite3
 from flask import Blueprint, request, jsonify
+from flask_session import Session
+from auth.login import session
 
 overview = Blueprint('overview', __name__)
 
@@ -11,22 +13,19 @@ def get_db():
 
 @overview.route('/test-overview', methods=['GET'])
 def test():
-    username = request.args.get('username')
-    password = request.args.get('password')
-
-    if not username or not password:
-        return jsonify({'error': 'Missing username or password'}), 400
+    user_id = session['user_id']
 
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
         SELECT * FROM tests
-        WHERE username=? AND location=? AND browser AND test_url AND results
-    ''', (username, password))
+        WHERE id=?
+    ''', (user_id,))
     tests = cursor.fetchall()
     if not tests:
         return jsonify({'tests': 'No test'})
 
     return jsonify({'tests': tests})
+
 
 

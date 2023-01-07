@@ -13,3 +13,4 @@ WTForms-JSON
 flask_wtf==1.0.1
 flask_restful
 stripe
+flask_session

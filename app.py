@@ -5,7 +5,6 @@ from views.EditEmail import change_email
 from views.EditPassword import change_password
 from views.EditProfilePicture import change_profile_image
 from views.logout import logout
-from views.add_payments import pay
 from views.subscription import subscription
 from views.TestOverview import overview
 from auth.login import sign_in
@@ -15,6 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.app_context()
+app.secret_key = 'your secret key here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///TestLoad.sqlite'
 
 
@@ -25,7 +25,6 @@ app.register_blueprint(change_email)
 app.register_blueprint(change_password)
 app.register_blueprint(change_profile_image)
 app.register_blueprint(logout)
-app.register_blueprint(pay)
 app.register_blueprint(subscription)
 app.register_blueprint(overview)
 app.register_blueprint(payments)

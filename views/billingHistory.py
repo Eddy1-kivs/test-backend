@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Blueprint, request, jsonify, session
-
+from auth.login import session
 billing_history = Blueprint('billing_history', __name__)
 
 
@@ -16,13 +16,14 @@ def user_billing_history():
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT * FROM billing_histories WHERE user_id=?
-    ''', user_id)
+        SELECT * FROM billing_histories WHERE id=?
+    ''', (user_id,))
     billing_history = cursor.fetchall()
     if not billing_history:
         return jsonify({'billing_history': 'No billing history found'})
 
     return jsonify({'billing_history': billing_history})
+
 
 @billing_history.route('/download-invoice', methods=['GET'])
 def download_invoice():
@@ -35,7 +36,7 @@ def download_invoice():
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT * FROM billing_histories WHERE user_id=? AND id=?
+        SELECT * FROM billing_histories WHERE id=? AND download=?
     ''', (user_id, invoice_id))
     invoice = cursor.fetchone()
     if not invoice:

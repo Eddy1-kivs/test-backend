@@ -2,44 +2,48 @@ import json
 import sqlite3
 
 from flask import Flask, request, jsonify, session, Blueprint
-from flask_sqlalchemy import SQLAlchemy
-import datetime
 
 get_started = Blueprint('get_started', __name__)
-
 
 def get_db():
     conn = sqlite3.connect('config/TestLoad.sqlite')
     return conn
 
-
-@get_started.route("/register", methods=["GET", 'POST'])
+@get_started.route("/register", methods=["POST"])
 def signup():
     errors = {}
-    requiredFields = ['first_name', 'last_name', 'phone_number', 'username', 'email', 'password', 'location']
-    data = request.get_json()
-    for field in requiredFields:
-        if field not in data:
+    required_fields = ['first_name', 'last_name', 'phone_number', 'username', 'email', 'password', 'location']
+    for field in required_fields:
+        if not request.form.get(field):
             errors[field] = 'This field is required'
 
-    defaultValue = ''
-    firstName = data.get('first_name', defaultValue)
-    lastName = data.get('last_name', defaultValue)
-    phoneNumber = data.get('phone_number', defaultValue)
-    username = data.get('username', defaultValue)
-    email = data.get('email', defaultValue)
-    password = data.get('password', defaultValue)
-    location = data.get('location', defaultValue)
-    img = data.get('img', defaultValue)
-    created_at = data.get('created_at', defaultValue)
-    updated_at = data.get('updated_at', defaultValue)
+    if errors:
+        return jsonify(errors), 400
+
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    phone_number = request.form.get('phone_number')
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    location = request.form.get('location')
+    img = request.form.get('img', '')
+    created_at = datetime.datetime.utcnow().isoformat()
+    updated_at = created_at
+
     conn = get_db()
     cursor = conn.cursor()
+
+    # Check if the provided username or email are already in use
+    cursor.execute('SELECT id FROM users WHERE username=? OR email=?', (username, email))
+    user = cursor.fetchone()
+    if user:
+        return jsonify({'error': 'Username or email already in use'}), 400
+
     try:
         cursor.execute('INSERT INTO users (first_name, last_name, phone_number, username, email, password, location, img, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)',
-                       (firstName, lastName, phoneNumber, username, email, password, location, img, created_at, updated_at))
+                       (first_name, last_name, phone_number, username, email, password, location, img, created_at, updated_at))
         conn.commit()
         return {'success': 'User has been registered'}
     except sqlite3.Error as e:
-        print(e)
         return {'error': 'There was an error inserting the data'}
