@@ -16,22 +16,23 @@ def get_db():
 @get_started.route("/register", methods=["GET", 'POST'])
 def signup():
     errors = {}
-    requiredFields = ['first_name', 'last_name', 'phone_number', 'username',                      'email', 'password', 'location']
+    requiredFields = ['first_name', 'last_name', 'phone_number', 'username', 'email', 'password', 'location']
+    data = request.get_json()
     for field in requiredFields:
-        if field not in request.form:
+        if field not in data:
             errors[field] = 'This field is required'
 
     defaultValue = ''
-    firstName = request.form.get('first_name',    defaultValue)
-    lastName = request.form.get('last_name', defaultValue)
-    phoneNumber = request.form.get('phone_number', defaultValue)
-    username = request.form.get('username', defaultValue)
-    email = request.form.get('email', defaultValue)
-    password = request.form.get('password', defaultValue)
-    location = request.form.get('location', defaultValue)
-    img = request.form.get('img', defaultValue)
-    created_at = request.form.get('created_at', defaultValue)
-    updated_at = request.form.get('updated_at', defaultValue)
+    firstName = data.get('first_name', defaultValue)
+    lastName = data.get('last_name', defaultValue)
+    phoneNumber = data.get('phone_number', defaultValue)
+    username = data.get('username', defaultValue)
+    email = data.get('email', defaultValue)
+    password = data.get('password', defaultValue)
+    location = data.get('location', defaultValue)
+    img = data.get('img', defaultValue)
+    created_at = data.get('created_at', defaultValue)
+    updated_at = data.get('updated_at', defaultValue)
     conn = get_db()
     cursor = conn.cursor()
     try:

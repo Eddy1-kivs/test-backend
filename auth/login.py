@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, session, Blueprint, redirect
 import sqlite3
+from flask_session import Session
 
 sign_in = Blueprint('sign_in', __name__)
 
@@ -29,6 +30,5 @@ def login():
         return {'errors': errors}
     else:
         # log the user in and redirect to the home page
+        session['user_id'] = user[0]
         return redirect('/home')
-
-
