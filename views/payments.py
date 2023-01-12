@@ -4,7 +4,8 @@ import stripe
 from auth.login import session
 
 payments = Blueprint('payments', __name__)
-stripe.api_key = "sk_live_your_key_here"
+stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
+                 "LZKMsQZtuOC8gPQNj4ejE5ZzB7zql00RjNbHXD4"
 
 
 def get_db():

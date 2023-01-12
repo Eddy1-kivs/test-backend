@@ -8,10 +8,12 @@ from views.logout import logout
 from views.subscription import subscription
 from views.TestOverview import overview
 from auth.login import sign_in
+from flask_cors import CORS
 from views.payments import payments
 
 
 app = Flask(__name__)
+CORS(app)
 app.app_context()
 app.secret_key = 'your secret key here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///TestLoad.sqlite'

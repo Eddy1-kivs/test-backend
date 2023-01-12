@@ -15,7 +15,8 @@ def get_db():
 @get_started.route("/register", methods=["POST"])
 def signup():
     errors = {}
-    required_fields = ['first_name', 'last_name', 'phone_number', 'username', 'email', 'password', 'location']
+    required_fields = ['first_name', 'last_name', 'phone_number', 'username', 'email', 'password', 'location',
+                       'confirm_password']
     for field in required_fields:
         if not request.get_json().get(field):
             errors[field] = 'This field is required'
@@ -29,10 +30,13 @@ def signup():
     username = request.get_json().get('username')
     email = request.get_json().get('email')
     password = request.get_json().get('password')
+    confirm_password = request.get_json().get('confirm_password')
     location = request.get_json().get('location')
-    img = request.get_json().get('img', '')
     created_at = datetime.datetime.utcnow().isoformat()
     updated_at = created_at
+
+    if password != confirm_password:
+        return jsonify({'error': 'Passwords do not match'}), 400
 
     conn = get_db()
     cursor = conn.cursor()
@@ -49,9 +53,10 @@ def signup():
 
     try:
         cursor.execute('INSERT INTO users (first_name, last_name, phone_number, username, email,'
-                       ' password, location, img, created_at, updated_at)'
+                       ' password, location, created_at, updated_at)'
                        ' VALUES (?,?,?,?,?,?,?,?,?,?)',
-                       (first_name, last_name, phone_number, username, email, hashed_password, location, img, created_at,updated_at))
+                       (first_name, last_name, phone_number, username, email, hashed_password, location, created_at,
+                        updated_at))
         conn.commit()
         return {'success': 'User has been registered'}
     except sqlite3.Error as e:
