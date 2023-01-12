@@ -59,6 +59,14 @@ def is_valid_cvv(cvv):
 @payments.route("/charge", methods=["POST"])
 def charge():
     user_id = session['user_id']
+    errors = {}
+    required_fields = ['username', 'card_number', 'card_holder_name', 'expiration_date', 'cvv', 'amount']
+    for field in required_fields:
+        if not request.form.get(field):
+            errors[field] = 'This field is required'
+
+    if errors:
+        return jsonify(errors), 400
 
     # Get the payment details from the form
     username = request.form.get("username")
@@ -69,8 +77,8 @@ def charge():
     amount = request.form.get("amount")
 
     # Validate the form input
-    if not all([username, card_number, card_holder_name, expiration_date, cvv, amount]):
-        return {"error": "All fields are required"}
+    # if not all([username, card_number, card_holder_name, expiration_date, cvv, amount]):
+    #     return {"error": "All fields are required"}
 
     # Validate the card number
     if not is_valid_card_number(card_number):
@@ -121,6 +129,7 @@ def charge():
     if charge.status == "succeeded":
         # Payment successful, insert the payment details into the database
         try:
+            conn = get_db()
             cursor = conn.cursor()
             cursor.execute(
                 "INSERT INTO payments (username, card_number, card_holder_name, expiration_date, cvv) "
