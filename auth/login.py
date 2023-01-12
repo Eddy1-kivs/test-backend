@@ -32,7 +32,7 @@ def login():
     user = cursor.fetchone()
     if user is None:
         errors['username'] = 'Invalid username or password'
-        return {'errors': errors}
+        return jsonify(errors), 400
     else:
         # log the user in and redirect to the home page
         session['user_id'] = user[0]
