@@ -16,7 +16,7 @@ def get_db():
 def signup():
     errors = {}
     required_fields = ['first_name', 'last_name', 'phone_number', 'username', 'email', 'password', 'location',
-                       'confirm_password']
+                       'password_confirmation']
     for field in required_fields:
         if not request.get_json().get(field):
             errors[field] = 'This field is required'
@@ -30,12 +30,12 @@ def signup():
     username = request.get_json().get('username')
     email = request.get_json().get('email')
     password = request.get_json().get('password')
-    confirm_password = request.get_json().get('confirm_password')
+    password_confirmation = request.get_json().get('confirm_password')
     location = request.get_json().get('location')
     created_at = datetime.datetime.utcnow().isoformat()
     updated_at = created_at
 
-    if password != confirm_password:
+    if password != password_confirmation:
         return jsonify({'error': 'Passwords do not match'}), 400
 
     conn = get_db()
