@@ -42,11 +42,16 @@ def signup():
     cursor = conn.cursor()
 
     # Check if the provided username or email are already in use
-    cursor.execute('SELECT id FROM users WHERE username=? OR email=?', (username, email))
+    cursor.execute('SELECT id FROM users WHERE username=?', (username,))
     user = cursor.fetchone()
     if user:
-        return jsonify({'error': 'Username or email already in use'}), 400
-
+        errors['username'] = 'Username already in use'
+    cursor.execute('SELECT id FROM users WHERE email=?', (email,))
+    user = cursor.fetchone()
+    if user:
+        errors['email'] = 'Email already in use'
+    if errors:
+        return jsonify(errors), 400
     # Hash the password before storing it
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     hashed_password = hashed_password.decode('utf-8')
