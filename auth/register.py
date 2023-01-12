@@ -1,13 +1,16 @@
 import json
 import sqlite3
+import datetime
 
 from flask import Flask, request, jsonify, session, Blueprint
 
 get_started = Blueprint('get_started', __name__)
 
+
 def get_db():
     conn = sqlite3.connect('config/TestLoad.sqlite')
     return conn
+
 
 @get_started.route("/register", methods=["POST"])
 def signup():
@@ -41,8 +44,11 @@ def signup():
         return jsonify({'error': 'Username or email already in use'}), 400
 
     try:
-        cursor.execute('INSERT INTO users (first_name, last_name, phone_number, username, email, password, location, img, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)',
-                       (first_name, last_name, phone_number, username, email, password, location, img, created_at, updated_at))
+        cursor.execute('INSERT INTO users (first_name, last_name, phone_number, username, email,'
+                       ' password, location, img, created_at, updated_at)'
+                       ' VALUES (?,?,?,?,?,?,?,?,?,?)',
+                       (first_name, last_name, phone_number, username, email, password, location, img, created_at,
+                        updated_at))
         conn.commit()
         return {'success': 'User has been registered'}
     except sqlite3.Error as e:

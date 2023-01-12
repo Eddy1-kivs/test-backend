@@ -9,7 +9,6 @@ from views.subscription import subscription
 from views.TestOverview import overview
 from auth.login import sign_in
 from views.payments import payments
-from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)

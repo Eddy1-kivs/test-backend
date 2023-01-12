@@ -32,3 +32,4 @@ def login():
         # log the user in and redirect to the home page
         session['user_id'] = user[0]
         return redirect('/home')
+
