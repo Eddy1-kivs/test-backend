@@ -14,13 +14,14 @@ def get_db():
 def login():
     errors = {}
     requiredFields = ['username', 'password']
+
     for field in requiredFields:
-        if field not in request.form:
+        if not request.get_json().get(field):
             errors[field] = 'This field is required'
 
     defaultValue = ''
-    username = request.form.get('username', defaultValue)
-    password = request.form.get('password', defaultValue)
+    username = request.get_json().get('username', defaultValue)
+    password = request.get_json().get('password', defaultValue)
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password))
