@@ -18,16 +18,16 @@ def change_your_email():
     errors = {}
     required_fields = ['current_email', 'new_email_address', 'confirm_email', 'password']
     for field in required_fields:
-        if not request.form.get(field):
+        if not request.get_json().get(field):
             errors[field] = 'This field is required'
 
     if errors:
         return jsonify(errors), 400
 
-    current_email = request.form.get('current_email')
-    new_email_address = request.form.get('new_email_address')
-    confirm_email = request.form.get('confirm_email')
-    password = request.form.get('password')
+    current_email = request.get_json().get('current_email')
+    new_email_address = request.get_json().get('new_email_address')
+    confirm_email = request.get_json().get('confirm_email')
+    password = request.get_json().get('password')
 
     if new_email_address != confirm_email:
         return jsonify({'error': 'New email address and confirm email address do not match'}), 400

@@ -14,9 +14,10 @@ from views.payments import payments
 
 
 app = Flask(__name__)
+CORS(app)
+
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
-CORS(app)
 app.app_context()
 app.secret_key = 'your secret key here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///config/TestLoad.sqlite'
