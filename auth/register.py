@@ -30,7 +30,7 @@ def signup():
     username = request.get_json().get('username')
     email = request.get_json().get('email')
     password = request.get_json().get('password')
-    password_confirmation = request.get_json().get('confirm_password')
+    password_confirmation = request.get_json().get('password_confirmation')
     location = request.get_json().get('location')
     created_at = datetime.datetime.utcnow().isoformat()
     updated_at = created_at
