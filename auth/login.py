@@ -19,9 +19,13 @@ def login():
         if not request.get_json().get(field):
             errors[field] = 'This field is required'
 
+    if errors:
+        return jsonify(errors), 400
+
     defaultValue = ''
     username = request.get_json().get('username', defaultValue)
     password = request.get_json().get('password', defaultValue)
+
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password))
