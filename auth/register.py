@@ -59,10 +59,11 @@ def signup():
     try:
         cursor.execute('INSERT INTO users (first_name, last_name, phone_number, username, email,'
                        ' password, location, created_at, updated_at)'
-                       ' VALUES (?,?,?,?,?,?,?,?,?,?)',
+                       ' VALUES (?,?,?,?,?,?,?,?,?)',
                        (first_name, last_name, phone_number, username, email, hashed_password, location, created_at,
                         updated_at))
         conn.commit()
+        session['user_id'] = cursor.lastrowid
         return {'success': 'User has been registered'}
     except sqlite3.Error as e:
         return {'error': 'There was an error inserting the data'}
