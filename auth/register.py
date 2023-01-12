@@ -52,9 +52,9 @@ def signup():
         errors['email'] = 'Email already in use'
     if errors:
         return jsonify(errors), 400
+
     # Hash the password before storing it
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    hashed_password = hashed_password.decode('utf-8')
 
     try:
         cursor.execute('INSERT INTO users (first_name, last_name, phone_number, username, email,'
