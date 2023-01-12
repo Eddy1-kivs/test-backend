@@ -19,7 +19,7 @@ Session(app)
 CORS(app)
 app.app_context()
 app.secret_key = 'your secret key here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///TestLoad.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///config/TestLoad.sqlite'
 
 
 app.register_blueprint(get_started)
