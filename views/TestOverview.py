@@ -1,6 +1,5 @@
 import sqlite3
-from flask import Blueprint, request, jsonify
-from flask_session import Session
+from flask import Blueprint, jsonify
 from auth.login import session
 
 overview = Blueprint('overview', __name__)
@@ -26,6 +25,3 @@ def test():
         return jsonify({'tests': 'No test'})
 
     return jsonify({'tests': tests})
-
-
-

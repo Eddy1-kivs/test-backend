@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, send_file
 from auth.login import session
 billing_history = Blueprint('billing_history', __name__)
 
@@ -26,7 +26,7 @@ def user_billing_history():
 
 
 @billing_history.route('/download-invoice', methods=['GET'])
-def download_invoice():
+def download_invoice(invoice_file=None):
     user_id = session['user_id']
     invoice_id = request.args.get('invoice_id')
 

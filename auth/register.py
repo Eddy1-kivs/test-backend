@@ -6,9 +6,11 @@ from flask import Flask, request, jsonify, session, Blueprint
 
 get_started = Blueprint('get_started', __name__)
 
+
 def get_db():
     conn = sqlite3.connect('config/TestLoad.sqlite')
     return conn
+
 
 @get_started.route("/register", methods=["POST"])
 def signup():

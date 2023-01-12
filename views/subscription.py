@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from auth.login import session
 
 subscription = Blueprint('subscription', __name__)
