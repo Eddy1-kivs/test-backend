@@ -9,15 +9,14 @@ from views.subscription import subscription
 from views.TestOverview import overview
 from auth.login import sign_in
 from flask_cors import CORS
-from flask_session import Session
+# from flask_session import Session
 from views.payments import payments
 
 
 app = Flask(__name__)
+# app.config['SESSION_TYPE'] = 'filesystem'
+# Session(app)
 CORS(app)
-
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
 app.app_context()
 app.secret_key = 'your secret key here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///config/TestLoad.sqlite'
