@@ -2,6 +2,7 @@ import json
 import sqlite3
 import datetime
 import bcrypt
+import re
 from flask import Flask, request, jsonify, session, Blueprint
 
 get_started = Blueprint('get_started', __name__)
@@ -20,6 +21,12 @@ def signup():
         if not request.get_json().get(field):
             errors[field] = 'This field is required'
 
+    email = request.get_json().get('email')
+    if email:
+        # Check if email is in the correct format
+        match = re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email)
+        if not match:
+            errors['email'] = 'Invalid email format'
     if errors:
         return jsonify(errors), 400
 
