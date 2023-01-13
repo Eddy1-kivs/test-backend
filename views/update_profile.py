@@ -13,7 +13,8 @@ def get_db():
 
 @change_profile_image.route('/change-profile-image', methods=['POST'])
 def change_profile_user_image():
-    user_id = session['user_id']
+    if not session.get('user_id'):
+        return jsonify({'error': 'Unauthorized access'}), 401
 
     errors = {}
     required_fields = ['first_name', 'last_name', 'phone_number']
