@@ -15,8 +15,7 @@ def get_db():
 @get_started.route("/register", methods=["POST"])
 def signup():
     errors = {}
-    required_fields = ['first_name', 'last_name', 'phone_number', 'username', 'email', 'password', 'location',
-                       'password_confirmation']
+    required_fields = ['username', 'email', 'password', 'password_confirmation']
     for field in required_fields:
         if not request.get_json().get(field):
             errors[field] = 'This field is required'
@@ -24,16 +23,11 @@ def signup():
     if errors:
         return jsonify(errors), 400
 
-    first_name = request.get_json().get('first_name')
-    last_name = request.get_json().get('last_name')
-    phone_number = request.get_json().get('phone_number')
     username = request.get_json().get('username')
     email = request.get_json().get('email')
     password = request.get_json().get('password')
     password_confirmation = request.get_json().get('password_confirmation')
-    location = request.get_json().get('location')
     created_at = datetime.datetime.utcnow().isoformat()
-    updated_at = created_at
 
     if password != password_confirmation:
         return jsonify({'error': 'Passwords do not match'}), 400
@@ -57,11 +51,10 @@ def signup():
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     try:
-        cursor.execute('INSERT INTO users (first_name, last_name, phone_number, username, email,'
-                       ' password, location, created_at, updated_at)'
-                       ' VALUES (?,?,?,?,?,?,?,?,?)',
-                       (first_name, last_name, phone_number, username, email, hashed_password, location, created_at,
-                        updated_at))
+        cursor.execute('INSERT INTO users (username, email,'
+                       ' password, created_at)'
+                       ' VALUES (?,?,?,?)',
+                       (username, email, hashed_password, created_at,))
         conn.commit()
         session['user_id'] = user[0]
         return {'success': 'User has been registered'}
