@@ -47,5 +47,5 @@ def change_profile_user_image():
 
 def save_image(image):
     # Save the image to disk and return the file path
-    # ...
+    # .
     return image_file_path
