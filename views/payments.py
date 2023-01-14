@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 import stripe
-from auth.login import session
 
 payments = Blueprint('payments', __name__)
 stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
@@ -59,7 +59,7 @@ def is_valid_cvv(cvv):
 
 @payments.route("/charge", methods=["POST"])
 def charge():
-    user_id = session['user_id']
+    user_id = get_jwt_identity()
     errors = {}
     required_fields = ['username', 'card_number', 'card_holder_name', 'expiration_date', 'cvv', 'amount']
     for field in required_fields:

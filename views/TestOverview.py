@@ -1,6 +1,7 @@
 import sqlite3
-from flask import Blueprint, jsonify
-from auth.login import session
+from flask import Blueprint, jsonify, session
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 overview = Blueprint('overview', __name__)
 
@@ -12,7 +13,7 @@ def get_db():
 
 @overview.route('/test-overview', methods=['GET'])
 def test():
-    user_id = session['user_id']
+    user_id = get_jwt_identity()
 
     conn = get_db()
     cursor = conn.cursor()

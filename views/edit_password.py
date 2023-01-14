@@ -1,7 +1,6 @@
 import sqlite3
 import bcrypt
 from flask import Blueprint, request, jsonify, session
-from auth.login import session
 
 change_password = Blueprint('change_password', __name__)
 

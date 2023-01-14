@@ -1,9 +1,11 @@
 import sqlite3
+import uuid
 from flask import Blueprint, request, jsonify
-from auth.login import session
 import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity
+import os
 
-change_profile_image = Blueprint('change_profile_image', __name__)
+update_profile = Blueprint('update_profile', __name__)
 
 
 def get_db():
@@ -11,10 +13,9 @@ def get_db():
     return conn
 
 
-@change_profile_image.route('/change-profile-image', methods=['POST'])
+@update_profile.route('/profile_update', methods=['POST'])
 def change_profile_user_image():
-    if not session.get('user_id'):
-        return jsonify({'error': 'Unauthorized access'}), 401
+    user_id = get_jwt_identity()
 
     errors = {}
     required_fields = ['first_name', 'last_name', 'phone_number']
@@ -38,14 +39,20 @@ def change_profile_user_image():
     image_file_path = save_image(image)
 
     cursor.execute('''
-        UPDATE users SET img=? WHERE username=?
-    ''', (image_file_path, first_name, last_name, phone_number, location, updated_at))
+        UPDATE users SET img=?, first_name=?, last_name=?, phone_number=?, location=?, updated_at=? WHERE user_id=?
+    ''', (image_file_path, first_name, last_name, phone_number, location, updated_at, user_id))
     conn.commit()
 
     return jsonify({'success': True})
 
 
 def save_image(image):
-    # Save the image to disk and return the file path
-    # .
-    return image_file_path
+    if not image:
+        return None
+
+    file_ext = os.path.splitext(image.filename)[1]
+    file_name = f"{str(uuid.uuid4())}{file_ext}"
+    file_path = os.path.join("path/to/save/images", file_name)
+
+    image.save(file_path)
+    return file_path

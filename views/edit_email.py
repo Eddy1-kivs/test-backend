@@ -1,6 +1,8 @@
 import sqlite3
 import bcrypt
-from flask import Blueprint, request, jsonify, session
+import re
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 change_email = Blueprint('change_email', __name__)
 
@@ -12,8 +14,7 @@ def get_db():
 
 @change_email.route('/email-change', methods=['POST'])
 def change_your_email():
-    if not session.get('user_id'):
-        return jsonify({'error': 'Unauthorized access'}), 401
+    user_id = get_jwt_identity()
 
     errors = {}
     required_fields = ['current_email', 'new_email_address', 'confirm_email', 'password']
@@ -31,11 +32,15 @@ def change_your_email():
 
     if new_email_address != confirm_email:
         return jsonify({'error': 'New email address and confirm email address do not match'}), 400
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", new_email_address):
+        return jsonify({'error': 'Invalid email format'}), 400
+    if new_email_address == current_email:
+        return jsonify({'error': 'New email address is the same as current email'}), 400
 
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT * FROM users WHERE email=?
+        SELECT * FROM users WHERE email=? 
     ''', (current_email,))
     user = cursor.fetchone()
     if not user:
