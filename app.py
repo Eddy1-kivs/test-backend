@@ -3,7 +3,7 @@ from auth.register import get_started
 from views.billingHistory import billing_history
 from views.edit_email import change_email
 from views.edit_password import change_password
-from views.update_profile import change_profile_image
+from views.update_profile import update_profile
 from views.logout import logout
 from views.subscription import subscription
 from views.TestOverview import overview
@@ -32,7 +32,7 @@ app.register_blueprint(sign_in)
 app.register_blueprint(billing_history)
 app.register_blueprint(change_email)
 app.register_blueprint(change_password)
-app.register_blueprint(change_profile_image)
+app.register_blueprint(update_profile)
 app.register_blueprint(logout)
 app.register_blueprint(subscription)
 app.register_blueprint(overview)
