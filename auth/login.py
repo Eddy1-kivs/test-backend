@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, create_access_token
 import bcrypt
 import bcrypt
+import sqlite3
 
 sign_in = Blueprint('sign_in', __name__)
 
@@ -9,6 +10,7 @@ sign_in = Blueprint('sign_in', __name__)
 def get_db():
     conn = sqlite3.connect('config/TestLoad.sqlite')
     return conn
+
 
 @sign_in.route("/login", methods=["POST"])
 def login():

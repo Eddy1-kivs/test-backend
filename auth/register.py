@@ -3,7 +3,6 @@ import sqlite3
 import datetime
 import bcrypt
 import re
-from app import jwt
 from flask import Flask, request, jsonify, session, Blueprint
 from flask_jwt_extended import JWTManager, create_access_token
 
