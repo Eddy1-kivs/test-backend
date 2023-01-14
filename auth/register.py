@@ -38,7 +38,8 @@ def signup():
     created_at = datetime.datetime.utcnow().isoformat()
 
     if password != password_confirmation:
-        return jsonify({'error': 'Passwords do not match'}), 400
+        errors['passwords'] = 'passwords do not match'
+        return jsonify(errors), 400
 
     conn = get_db()
     cursor = conn.cursor()
@@ -64,9 +65,7 @@ def signup():
                        ' VALUES (?,?,?,?)',
                        (username, email, hashed_password, created_at,))
         conn.commit()
-        user_id = cursor.lastrowid
-        access_token = create_access_token(identity=user_id)
-        return {'success': 'User has been registered', 'access_token': access_token}
+        session['username'] = username
+        return {'success': 'User has been registered'}
     except sqlite3.Error as e:
         return {'error': 'There was an error inserting the data'}
-

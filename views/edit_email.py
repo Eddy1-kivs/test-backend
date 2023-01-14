@@ -1,8 +1,7 @@
 import sqlite3
 import bcrypt
 import re
-from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import Blueprint, request, jsonify, session
 
 change_email = Blueprint('change_email', __name__)
 
@@ -14,7 +13,7 @@ def get_db():
 
 @change_email.route('/email-change', methods=['POST'])
 def change_your_email():
-    user_id = get_jwt_identity()
+    user_id = session['user_id']
 
     errors = {}
     required_fields = ['current_email', 'new_email_address', 'confirm_email', 'password']

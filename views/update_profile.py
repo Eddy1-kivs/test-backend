@@ -1,8 +1,7 @@
 import sqlite3
 import uuid
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 import datetime
-from flask_jwt_extended import jwt_required, get_jwt_identity
 import os
 
 update_profile = Blueprint('update_profile', __name__)
@@ -15,7 +14,7 @@ def get_db():
 
 @update_profile.route('/profile_update', methods=['POST'])
 def change_profile_user_image():
-    user_id = get_jwt_identity()
+    user_id = session['user_id']
 
     errors = {}
     required_fields = ['first_name', 'last_name', 'phone_number']

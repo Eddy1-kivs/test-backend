@@ -1,6 +1,5 @@
 import sqlite3
-from flask import Blueprint, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import Blueprint, jsonify, session
 
 
 subscription = Blueprint('subscription', __name__)
@@ -13,7 +12,7 @@ def get_db():
 
 @subscription.route('/subscription', methods=['GET'])
 def user_subscription():
-    user_id = get_jwt_identity()
+    user_id = session['user_id']
 
     conn = get_db()
     cursor = conn.cursor()

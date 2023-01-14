@@ -11,19 +11,16 @@ from auth.login import sign_in
 from flask_cors import CORS
 from flask_session import Session
 from views.payments import payments
-from flask_jwt_extended import (
-    JWTManager, create_access_token
-)
+# from flask_jwt_extended import (
+#     JWTManager, create_access_token
+# )
 
 
 app = Flask(__name__)
-app.config['JWT_SECRET_KEY'] = 'secret'  # change this to a secure key
-jwt = JWTManager(app)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 CORS(app)
-# app.app_context()
-# app.secret_key = 'your secret key here'
+app.secret_key = 'your secret key here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///config/TestLoad.sqlite'
 
 

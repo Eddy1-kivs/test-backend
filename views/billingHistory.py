@@ -1,6 +1,5 @@
 import sqlite3
 from flask import Blueprint, request, jsonify, send_file, session
-from flask_jwt_extended import jwt_required, get_jwt_identity
 
 billing_history = Blueprint('billing_history', __name__)
 
@@ -12,7 +11,7 @@ def get_db():
 
 @billing_history.route('/billing-history-view', methods=['GET'])
 def user_billing_history():
-    user_id = get_jwt_identity()
+    user_id = session['user_id']
 
     conn = get_db()
     cursor = conn.cursor()
