@@ -3,7 +3,9 @@ import sqlite3
 import datetime
 import bcrypt
 import re
+from app import jwt
 from flask import Flask, request, jsonify, session, Blueprint
+from flask_jwt_extended import JWTManager, create_access_token
 
 get_started = Blueprint('get_started', __name__)
 
@@ -63,7 +65,9 @@ def signup():
                        ' VALUES (?,?,?,?)',
                        (username, email, hashed_password, created_at,))
         conn.commit()
-        session['user_id'] = user[0]
-        return {'success': 'User has been registered'}
+        user_id = cursor.lastrowid
+        access_token = create_access_token(identity=user_id)
+        return {'success': 'User has been registered', 'access_token': access_token}
     except sqlite3.Error as e:
         return {'error': 'There was an error inserting the data'}
+
