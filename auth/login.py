@@ -1,17 +1,37 @@
-from flask import Flask, request, jsonify, Blueprint, session
+from sqlalchemy import create_engine, Column, Integer, String, Date
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import bcrypt
+from flask import request, jsonify, Blueprint,  Flask
+from datetime import datetime
 from flask_jwt_extended import JWTManager, create_access_token
-import bcrypt
-import bcrypt
-# from flask_session import Session
-import sqlite3
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+jwt = JWTManager(app)
+
+# Connect to the database
+engine = create_engine('sqlite:///TestLoad.db', echo=True)
+Base = declarative_base()
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Create the User class
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    phone_number = Column(String)
+    username = Column(String)
+    email = Column(String)
+    password = Column(String)
+    location = Column(String)
+    img = Column(String)
+    created_at = Column(Date)
+    updated_at = Column(Date)
 
 sign_in = Blueprint('sign_in', __name__)
-
-
-def get_db():
-    conn = sqlite3.connect('config/TestLoad.sqlite')
-    return conn
-
 
 @sign_in.route("/login", methods=["POST"])
 def login():
@@ -27,17 +47,15 @@ def login():
     username = request.get_json().get('username')
     password = request.get_json().get('password')
 
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE username=?', (username,))
-    user = cursor.fetchone()
-    if user is None:
-        errors['username'] = 'Invalid username or password'
-        return jsonify(errors), 400
-    else:
+    user = session.query(User).filter_by(username=username).first()
+    if user:
         # Compare password
-        if not bcrypt.checkpw(password.encode('utf-8'), user[3].encode('utf-8')):
-            errors['password'] = 'Invalid username or password'
+        if bcrypt.checkpw(password.encode('utf-8'), user.password):
+            access_token = create_access_token(identity=user.username)
+            return jsonify(access_token=access_token), 200
+        else:
+            errors['password'] = 'Invalid password'
             return jsonify(errors), 400
-    session['user_id'] = user[0]
-    return jsonify(message="Logged in successfully"), 200
+    else:
+        errors['username'] = 'Invalid username'
+        return jsonify(errors), 400

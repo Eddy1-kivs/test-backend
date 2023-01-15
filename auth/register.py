@@ -1,19 +1,43 @@
-import json
-import sqlite3
-import datetime
+from sqlalchemy import create_engine, Column, Integer, String, Date
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import bcrypt
 import re
-from flask import Flask, request, jsonify, session, Blueprint
+from flask import session
+from datetime import datetime
+from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, create_access_token
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+jwt = JWTManager(app)
+
+# Connect to the database
+engine = create_engine('sqlite:///TestLoad.db', echo=True)
+Base = declarative_base()
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Create the User class
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    phone_number = Column(String)
+    username = Column(String)
+    email = Column(String)
+    password = Column(String)
+    location = Column(String)
+    img = Column(String)
+    created_at = Column(Date)
+    updated_at = Column(Date)
+
 
 get_started = Blueprint('get_started', __name__)
 
 
-def get_db():
-    conn = sqlite3.connect('config/TestLoad.sqlite')
-    return conn
-
-
+# Create the /register endpoint
 @get_started.route("/register", methods=["POST"])
 def signup():
     errors = {}
@@ -35,22 +59,16 @@ def signup():
     email = request.get_json().get('email')
     password = request.get_json().get('password')
     password_confirmation = request.get_json().get('password_confirmation')
-    created_at = datetime.datetime.utcnow().isoformat()
+    created_at = datetime.now()
 
     if password != password_confirmation:
         errors['passwords'] = 'passwords do not match'
         return jsonify(errors), 400
 
-    conn = get_db()
-    cursor = conn.cursor()
-
-    # Check if the provided username or email are already in use
-    cursor.execute('SELECT id FROM users WHERE username=?', (username,))
-    user = cursor.fetchone()
+    user = session.query(User).filter_by(username=username).first()
     if user:
         errors['username'] = 'Username already in use'
-    cursor.execute('SELECT id FROM users WHERE email=?', (email,))
-    user = cursor.fetchone()
+    user = session.query(User).filter_by(email=email).first()
     if user:
         errors['email'] = 'Email already in use'
     if errors:
@@ -59,13 +77,18 @@ def signup():
     # Hash the password before storing it
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    try:
-        cursor.execute('INSERT INTO users (username, email,'
-                       ' password, created_at)'
-                       ' VALUES (?,?,?,?)',
-                       (username, email, hashed_password, created_at,))
-        conn.commit()
-        session['username'] = username
-        return {'success': 'User has been registered'}
-    except sqlite3.Error as e:
-        return {'error': 'There was an error inserting the data'}
+    # Insert new
+    new_user = User(username=username, email=email, password=hashed_password, created_at=created_at)
+    session.add(new_user)
+    session.commit()
+    session.close()
+
+    # Create an access token
+    if user:
+        access_token = create_access_token(identity=user.username)
+    else:
+        access_token = None
+    return jsonify(access_token=access_token)
+
+    # except sqlite3.Error as e:
+    # return {'error': 'There was an error inserting the data'}

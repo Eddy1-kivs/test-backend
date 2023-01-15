@@ -55,3 +55,19 @@ def save_image(image):
 
     image.save(file_path)
     return file_path
+
+
+# @get_started.route('/user/<int:user_id>', methods=['PUT'])
+# def update_user(user_id):
+#     user = session.query(User).filter_by(id=user_id).first()
+#     if user:
+#         first_name = request.json.get('first_name')
+#         last_name = request.json.get('last_name')
+#         if first_name:
+#             user.first_name = first_name
+#         if last_name:
+#             user.last_name = last_name
+#         session.commit()
+#         return jsonify({'success': 'User has been updated'})
+#     else:
+#         return jsonify({'error': 'User not found'}), 404

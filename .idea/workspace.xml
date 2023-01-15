@@ -5,8 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3edddf14-701b-47cd-b2a9-2e1a98572188" name="Changes" comment="update">
+      <change afterPath="$PROJECT_DIR$/TestLoad.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/test-backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test-backend.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestLoad.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/views/TestLoad.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/register.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/register.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/097d45209a150a7e5fde347cbb881efe" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/097d45209a150a7e5fde347cbb881efe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/update_profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/update_profile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,13 +89,14 @@
       <recent name="$PROJECT_DIR$/config" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/config" />
-      <recent name="$PROJECT_DIR$/auth" />
+      <recent name="$PROJECT_DIR$/views" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/auth" />
+      <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/models" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.database">
+  <component name="RunManager">
     <configuration name="database" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="test-backend" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -241,55 +253,6 @@
       <workItem from="1673025863040" duration="29000" />
       <workItem from="1673030259673" duration="15665000" />
       <workItem from="1673123483286" duration="308000" />
-    </task>
-    <task id="LOCAL-00009" summary="update">
-      <created>1671282673972</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1671282673972</updated>
-    </task>
-    <task id="LOCAL-00010" summary="update">
-      <created>1671283170858</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1671283170858</updated>
-    </task>
-    <task id="LOCAL-00011" summary="update">
-      <created>1671283798273</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1671283798273</updated>
-    </task>
-    <task id="LOCAL-00012" summary="update">
-      <created>1671283892584</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1671283892584</updated>
-    </task>
-    <task id="LOCAL-00013" summary="update">
-      <created>1671283961627</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1671283961627</updated>
-    </task>
-    <task id="LOCAL-00014" summary="update">
-      <created>1671287008708</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1671287008708</updated>
-    </task>
-    <task id="LOCAL-00015" summary="update">
-      <created>1671301429333</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1671301429333</updated>
     </task>
     <task id="LOCAL-00016" summary="update">
       <created>1671387401998</created>
@@ -585,7 +548,56 @@
       <option name="project" value="LOCAL" />
       <updated>1673601913445</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="update">
+      <created>1673687447342</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1673687447342</updated>
+    </task>
+    <task id="LOCAL-00059" summary="update">
+      <created>1673687765516</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1673687765516</updated>
+    </task>
+    <task id="LOCAL-00060" summary="update">
+      <created>1673687820785</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1673687820785</updated>
+    </task>
+    <task id="LOCAL-00061" summary="update">
+      <created>1673693479211</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1673693479211</updated>
+    </task>
+    <task id="LOCAL-00062" summary="update">
+      <created>1673710406751</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1673710406751</updated>
+    </task>
+    <task id="LOCAL-00063" summary="update">
+      <created>1673713013281</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1673713013281</updated>
+    </task>
+    <task id="LOCAL-00064" summary="update">
+      <created>1673718391024</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1673718391024</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
