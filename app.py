@@ -9,7 +9,7 @@ from views.tests.TestOverview import overview
 from auth.login import sign_in
 from flask_cors import CORS
 from flask_session import Session
-from views.payments import payments
+from views.subscriptions.payments import payments
 from views.profile.profile import user_profile
 from flask_jwt_extended import JWTManager
 
