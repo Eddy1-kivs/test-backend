@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from flask import request, jsonify, Blueprint, Flask
 from datetime import datetime
+import stripe
 from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
 
 app = Flask(__name__)
@@ -48,9 +49,12 @@ class Subscriptions(Base):
     user = relationship("User", backref="subscriptions")
 
 
-@subscription.route('/subscription/add', methods=['POST'])
+add_subscription = Blueprint('add_subscription', __name__)
+
+
+@add_subscription.route('/subscription/add', methods=['POST'])
 @jwt_required
-def add_subscription():
+def subscription():
     user_id = get_jwt_identity()
     # retrieve the subscription details from the request body
     current_plan = request.get_json().get('current_plan')

@@ -10,6 +10,8 @@ from auth.login import sign_in
 from flask_cors import CORS
 from flask_session import Session
 from views.subscriptions.payments import payments
+from views.subscriptions.add_subscritpion import add_subscription
+from views.subscriptions.subscription import subscription
 from views.profile.profile import user_profile
 from flask_jwt_extended import JWTManager
 
@@ -28,7 +30,8 @@ app.register_blueprint(change_password)
 app.register_blueprint(update_profile)
 app.register_blueprint(logout)
 app.register_blueprint(user_profile)
-# app.register_blueprint(subscription)
+app.register_blueprint(subscription)
+app.register_blueprint(add_subscription)
 app.register_blueprint(overview)
 app.register_blueprint(payments)
 
