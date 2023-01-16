@@ -31,7 +31,9 @@ class User(Base):
     created_at = Column(Date)
     updated_at = Column(Date)
 
+
 sign_in = Blueprint('sign_in', __name__)
+
 
 @sign_in.route("/login", methods=["POST"])
 def login():
