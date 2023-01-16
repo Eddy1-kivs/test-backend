@@ -1,23 +1,17 @@
 from flask import Flask
 from auth.register import get_started
 from views.billingHistory import billing_history
-from views.edit_email import change_email
-from views.edit_password import change_password
-from views.update_profile import update_profile
+from views.settings.edit_email import change_email
+from views.settings.edit_password import change_password
+from views.profile.update_profile import update_profile
 from views.logout import logout
-from views.subscription import subscription
-from views.TestOverview import overview
+from views.tests.TestOverview import overview
 from auth.login import sign_in
 from flask_cors import CORS
 from flask_session import Session
 from views.payments import payments
-import requests
-from flask_jwt_extended import JWTManager, create_access_token
-
-# from flask_jwt_extended import (
-#     JWTManager, create_access_token
-# )
-
+from views.profile.profile import user_profile
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -33,6 +27,7 @@ app.register_blueprint(change_email)
 app.register_blueprint(change_password)
 app.register_blueprint(update_profile)
 app.register_blueprint(logout)
+app.register_blueprint(user_profile)
 # app.register_blueprint(subscription)
 app.register_blueprint(overview)
 app.register_blueprint(payments)

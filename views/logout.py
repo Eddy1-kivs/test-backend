@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
 
 logout = Blueprint('logout', __name__)

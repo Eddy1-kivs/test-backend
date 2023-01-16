@@ -105,3 +105,4 @@ def update_user_profile():
     session.commit()
     session.close()
     return jsonify({'success': True})
+

@@ -5,21 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3edddf14-701b-47cd-b2a9-2e1a98572188" name="Changes" comment="update">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/profile/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/profile/profile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/settings/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/TestLoad.sqlite" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/database.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/TestOverview.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/TestOverview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/billingHistory.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/billingHistory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/edit_email.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/edit_email.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/edit_password.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/edit_password.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/edit_email.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/settings/edit_email.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/edit_password.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/settings/edit_password.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/logout.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/logout.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/subscription.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/subscription.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/update_profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/update_profile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/update_profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/profile/update_profile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,11 +84,11 @@
       <recent name="$PROJECT_DIR$/config" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/views/profile" />
+      <recent name="$PROJECT_DIR$/views/settings" />
       <recent name="$PROJECT_DIR$/views" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/auth" />
-      <recent name="$PROJECT_DIR$/config" />
-      <recent name="$PROJECT_DIR$/models" />
     </key>
   </component>
   <component name="RunManager">
@@ -255,20 +248,6 @@
       <workItem from="1673025863040" duration="29000" />
       <workItem from="1673030259673" duration="15665000" />
       <workItem from="1673123483286" duration="308000" />
-    </task>
-    <task id="LOCAL-00019" summary="update">
-      <created>1671475039740</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1671475039740</updated>
-    </task>
-    <task id="LOCAL-00020" summary="update">
-      <created>1671536577213</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1671536577213</updated>
     </task>
     <task id="LOCAL-00021" summary="update">
       <created>1671541929621</created>
@@ -599,7 +578,21 @@
       <option name="project" value="LOCAL" />
       <updated>1673859766333</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="update">
+      <created>1673869208653</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1673869208653</updated>
+    </task>
+    <task id="LOCAL-00069" summary="update">
+      <created>1673869304885</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1673869304885</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
