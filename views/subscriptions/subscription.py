@@ -48,40 +48,18 @@ class Subscriptions(Base):
 subscription = Blueprint('subscription', __name__)
 
 
-@app.route('/subscription/add', methods=['POST'])
+@subscription.route('/subscription', methods=['GET'])
 @jwt_required
-def add_subscription_and_process_payment():
+def user_subscription():
     user_id = get_jwt_identity()
-    current_plan = request.get_json().get('current_plan')
-    plan_amount = request.get_json().get('plan_amount')
-    card_number = request.get_json().get('card_number')
-    created_at = datetime.utcnow()
 
-    # create a new subscription object
-    new_subscription = Subscriptions(user_id=user_id,
-                                     current_plan=current_plan,
-                                     plan_amount=plan_amount,
-                                     card_number=card_number,
-                                     created_at=created_at)
-    # add the subscription to the session
-    session.add(new_subscription)
-    # commit the transaction
-    session.commit()
+    user_subscriptions = session.query(Subscriptions).filter_by(user_id=user_id).all()
+    if not user_subscriptions:
+        return jsonify({'error': 'Subscription not found'}), 404
 
-    # process the payment using the Stripe API
-    try:
-        # create a new charge
-        charge = stripe.Charge.create(
-            amount=plan_amount*100,
-            currency='usd',
-            source=card_number,
-            description='Payment for ' + current_plan + ' plan'
-        )
-
-        # check if the payment is successful
-        if charge['status'] == 'succeeded':
-            return jsonify({'message': 'Payment processed successfully.'})
-        else:
-            return jsonify({'message': 'Payment failed.'})
-    except stripe.error.CardError as e:
-        return jsonify({'error': e.json_body['error']['message']})
+    return jsonify({
+        'current_plan': user_subscriptions[1],
+        'plan_amount': user_subscriptions[2],
+        'card_number': user_subscriptions[3],
+        'created_at': user_subscriptions[4],
+    })
