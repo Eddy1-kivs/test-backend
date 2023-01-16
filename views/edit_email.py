@@ -1,19 +1,47 @@
-import sqlite3
+from sqlalchemy import create_engine, Column, Integer, String, Date
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import bcrypt
 import re
-from flask import Blueprint, request, jsonify, session
+from flask import request, jsonify, Blueprint,  Flask
+from datetime import datetime
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+jwt = JWTManager(app)
+
+# Connect to the database
+engine = create_engine('sqlite:///TestLoad.db', echo=True)
+Base = declarative_base()
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Create the User class
+
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    phone_number = Column(String)
+    username = Column(String)
+    email = Column(String)
+    password = Column(String)
+    location = Column(String)
+    img = Column(String)
+    created_at = Column(Date)
+    updated_at = Column(Date)
+
 
 change_email = Blueprint('change_email', __name__)
 
 
-def get_db():
-    conn = sqlite3.connect('config/TestLoad.sqlite')
-    return conn
-
-
 @change_email.route('/email-change', methods=['POST'])
+@jwt_required
 def change_your_email():
-    user_id = session['user_id']
+    user_id = get_jwt_identity()
 
     errors = {}
     required_fields = ['current_email', 'new_email_address', 'confirm_email', 'password']
@@ -36,12 +64,7 @@ def change_your_email():
     if new_email_address == current_email:
         return jsonify({'error': 'New email address is the same as current email'}), 400
 
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('''
-        SELECT * FROM users WHERE email=? 
-    ''', (current_email,))
-    user = cursor.fetchone()
+    user = session.query(User).filter_by(user_id=user_id).one()
     if not user:
         return jsonify({'error': 'Invalid email'}), 401
 
@@ -49,10 +72,9 @@ def change_your_email():
         return jsonify({'error': 'Invalid password'}), 401
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    cursor.execute('''
-        UPDATE users SET email=?, password=? WHERE email=?
-    ''', (new_email_address, hashed_password, current_email))
-    conn.commit()
+    edit_email = User(email=new_email_address)
+    session.add(edit_email)
+    session.commit()
+    session.close()
 
     return jsonify({'success': True})
-

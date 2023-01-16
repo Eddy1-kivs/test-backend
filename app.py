@@ -33,7 +33,7 @@ app.register_blueprint(change_email)
 app.register_blueprint(change_password)
 app.register_blueprint(update_profile)
 app.register_blueprint(logout)
-app.register_blueprint(subscription)
+# app.register_blueprint(subscription)
 app.register_blueprint(overview)
 app.register_blueprint(payments)
 

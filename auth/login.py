@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import bcrypt
+import re
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
 from flask_jwt_extended import JWTManager, create_access_token

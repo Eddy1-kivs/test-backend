@@ -44,7 +44,7 @@ class Subscriptions(Base):
     user = relationship("User", backref="subscriptions")
 
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 subscription = Blueprint('subscription', __name__)
 
 

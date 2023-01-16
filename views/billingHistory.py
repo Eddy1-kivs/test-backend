@@ -43,7 +43,7 @@ class BillingHistory(Base):
     user = relationship("User", backref="billing_histories")
 
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 billing_history = Blueprint('billing_history', __name__)
 
 
