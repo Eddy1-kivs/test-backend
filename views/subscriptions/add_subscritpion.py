@@ -9,11 +9,15 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
+
 # Connect to the database
 engine = create_engine('sqlite:///TestLoad.db', echo=True)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
+
+stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
+                 "LZKMsQZtuOC8gPQNj4ejE5ZzB7zql00RjNbHXD4"
 
 # Create the User and Subscriptions classes
 
@@ -44,14 +48,11 @@ class Subscriptions(Base):
     user = relationship("User", backref="subscriptions")
 
 
-# Base.metadata.create_all(engine)
-subscription = Blueprint('subscription', __name__)
-
-
-@app.route('/subscription/add', methods=['POST'])
+@subscription.route('/subscription/add', methods=['POST'])
 @jwt_required
-def add_subscription_and_process_payment():
+def add_subscription():
     user_id = get_jwt_identity()
+    # retrieve the subscription details from the request body
     current_plan = request.get_json().get('current_plan')
     plan_amount = request.get_json().get('plan_amount')
     card_number = request.get_json().get('card_number')
@@ -68,20 +69,5 @@ def add_subscription_and_process_payment():
     # commit the transaction
     session.commit()
 
-    # process the payment using the Stripe API
-    try:
-        # create a new charge
-        charge = stripe.Charge.create(
-            amount=plan_amount*100,
-            currency='usd',
-            source=card_number,
-            description='Payment for ' + current_plan + ' plan'
-        )
+    return jsonify({'message': 'New subscription added successfully.'})
 
-        # check if the payment is successful
-        if charge['status'] == 'succeeded':
-            return jsonify({'message': 'Payment processed successfully.'})
-        else:
-            return jsonify({'message': 'Payment failed.'})
-    except stripe.error.CardError as e:
-        return jsonify({'error': e.json_body['error']['message']})

@@ -11,14 +11,40 @@ app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
 payments = Blueprint('payments', __name__)
-stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
-                 "LZKMsQZtuOC8gPQNj4ejE5ZzB7zql00RjNbHXD4"
 
 # Connect to the database
 engine = create_engine('sqlite:///TestLoad.db', echo=True)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    phone_number = Column(String)
+    username = Column(String)
+    email = Column(String)
+    password = Column(String)
+    location = Column(String)
+    img = Column(String)
+    created_at = Column(Date)
+    updated_at = Column(Date)
+
+
+class Payments(Base):
+    __tablename__ = 'payments'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    username = Column(String)
+    card_number = Column(String)
+    card_holder_name = Column(String)
+    expiration_date = Column(Date)
+    cvv = Column(String)
+    created_at = Column(Date)
+    user = relationship("User", backref="payments")
+
 
 def is_valid_card_number(card_number):
     # Add implementation to validate card number using luhn algorithm
@@ -66,7 +92,7 @@ def is_valid_cvv(cvv):
 
 @payments.route("/charge", methods=["POST"])
 @jwt_required
-def charge():
+def card():
     user_id = get_jwt_identity()
     errors = {}
     required_fields = ['card_number', 'card_holder_name', 'expiration_date', 'cvv']
@@ -98,49 +124,10 @@ def charge():
     # Validate the CVV
     if not is_valid_cvv(cvv):
         return {"error": "Invalid CVV"}
-
-    # retrieve the user's subscription details
-    user_subscription = session.query(Subscriptions).filter_by(user_id=user_id).first()
-    if not user_subscription:
-        return jsonify({'error': 'Subscription not found'}), 404
-
-    plan_amount = user_subscription.plan_amount
-
-    # create a new charge using Stripe
-    try:
-        charge = stripe.Charge.create(
-            amount=plan_amount,
-            currency='usd',
-            source=card_number,
-            description='Example charge'
-        )
-    except Exception as e:
-        return {"error": "Error creating Stripe token: {}".format(e)}
-    try:
-        charge = stripe.Charge.create(
-            amount=amount,
-            currency='usd',
-            card={
-                "number": card_number,
-                "exp_month": int(expiration_date.split("/")[0]),
-                "exp_year": int(expiration_date.split("/")[1]),
-                "cvc": cvv,
-                "name": card_holder_name
-            },
-            description='Charge for ' + username
-        )
-    except stripe.error.CardError as e:
-        return {"error": e.json_body['error']['message']}
-
-    # Save the payment details to the database
-    payment = Payment(user_id=user_id,
-                      card_number=card_number,
-                      card_holder_name=card_holder_name,
-                      expiration_date=expiration_date,
-                      cvv=cvv,
-                      amount=amount,
-                      created_at=datetime.utcnow())
+    # Create the payment object
+    payment = Payment(user_id=user_id, card_number=card_number, card_holder_name=card_holder_name,
+                      expiration_date=expiration_date, cvv=cvv)
     session.add(payment)
     session.commit()
 
-    return jsonify({'message': 'Payment successful'}), 200
+    return jsonify({'message': 'card added successfully'}), 200
