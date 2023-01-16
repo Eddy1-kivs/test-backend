@@ -1,16 +1,24 @@
-import sqlite3
-from flask import Blueprint, request, jsonify, session
+from sqlalchemy import create_engine, Column, Integer, String, Float, Date, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
+from flask import request, jsonify, Blueprint, Flask
+from datetime import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
 import stripe
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+jwt = JWTManager(app)
 
 payments = Blueprint('payments', __name__)
 stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
                  "LZKMsQZtuOC8gPQNj4ejE5ZzB7zql00RjNbHXD4"
 
-
-def get_db():
-    conn = sqlite3.connect('config/TestLoad.sqlite')
-    return conn
-
+# Connect to the database
+engine = create_engine('sqlite:///TestLoad.db', echo=True)
+Base = declarative_base()
+Session = sessionmaker(bind=engine)
+session = Session()
 
 def is_valid_card_number(card_number):
     # Add implementation to validate card number using luhn algorithm
@@ -57,10 +65,11 @@ def is_valid_cvv(cvv):
 
 
 @payments.route("/charge", methods=["POST"])
+@jwt_required
 def charge():
-    user_id = session['user_id']
+    user_id = get_jwt_identity()
     errors = {}
-    required_fields = ['username', 'card_number', 'card_holder_name', 'expiration_date', 'cvv', 'amount']
+    required_fields = ['card_number', 'card_holder_name', 'expiration_date', 'cvv']
     for field in required_fields:
         if not request.form.get(field):
             errors[field] = 'This field is required'
@@ -69,16 +78,14 @@ def charge():
         return jsonify(errors), 400
 
     # Get the payment details from the form
-    username = request.form.get("username")
     card_number = request.form.get("card_number")
     card_holder_name = request.form.get("card_holder_name")
     expiration_date = request.form.get("expiration_date")
     cvv = request.form.get("cvv")
-    amount = request.form.get("amount")
 
     # Validate the form input
-    # if not all([username, card_number, card_holder_name, expiration_date, cvv, amount]):
-    #     return {"error": "All fields are required"}
+    if not all([card_number, card_holder_name, expiration_date, cvv]):
+        return {"error": "All fields are required"}
 
     # Validate the card number
     if not is_valid_card_number(card_number):
@@ -92,55 +99,48 @@ def charge():
     if not is_valid_cvv(cvv):
         return {"error": "Invalid CVV"}
 
-    # Convert the amount to an integer and validate it
-    try:
-        amount = int(amount)
-        if amount <= 0:
-            return {"error": "Invalid payment amount"}
-    except ValueError:
-        return {"error": "Invalid payment amount"}
+    # retrieve the user's subscription details
+    user_subscription = session.query(Subscriptions).filter_by(user_id=user_id).first()
+    if not user_subscription:
+        return jsonify({'error': 'Subscription not found'}), 404
 
-    # Create a Stripe token from the card details
+    plan_amount = user_subscription.plan_amount
+
+    # create a new charge using Stripe
     try:
-        token = stripe.Token.create(
-            card={
-                "number": card_number,
-                "exp_month": expiration_date.split("/")[0],
-                "exp_year": expiration_date.split("/")[1],
-                "cvc": cvv,
-                "name": card_holder_name
-            },
+        charge = stripe.Charge.create(
+            amount=plan_amount,
+            currency='usd',
+            source=card_number,
+            description='Example charge'
         )
     except Exception as e:
         return {"error": "Error creating Stripe token: {}".format(e)}
-
-    # Charge the payment
     try:
         charge = stripe.Charge.create(
             amount=amount,
-            currency="usd",
-            source=token.id,
-            description="Payment for {}".format(username)
+            currency='usd',
+            card={
+                "number": card_number,
+                "exp_month": int(expiration_date.split("/")[0]),
+                "exp_year": int(expiration_date.split("/")[1]),
+                "cvc": cvv,
+                "name": card_holder_name
+            },
+            description='Charge for ' + username
         )
-    except Exception as e:
-        return {"error": "Error charging payment: {}".format(e)}
+    except stripe.error.CardError as e:
+        return {"error": e.json_body['error']['message']}
 
-    # Check if the payment was successful
-    if charge.status == "succeeded":
-        # Payment successful, insert the payment details into the database
-        try:
-            conn = get_db()
-            cursor = conn.cursor()
-            cursor.execute(
-                "INSERT INTO payments (username, card_number, card_holder_name, expiration_date, cvv) "
-                "VALUES (?, ?, ?, ?, ?)",
-                (username, "xxxx-xxxx-xxxx-" + card_number[-4:], card_holder_name, expiration_date, "xxx"))
-            conn.commit()
-        except Exception as e:
-            return {"error": "Error inserting payment details: {}".format(e)}
+    # Save the payment details to the database
+    payment = Payment(user_id=user_id,
+                      card_number=card_number,
+                      card_holder_name=card_holder_name,
+                      expiration_date=expiration_date,
+                      cvv=cvv,
+                      amount=amount,
+                      created_at=datetime.utcnow())
+    session.add(payment)
+    session.commit()
 
-        return {"username": username,
-                "amount": amount,
-                "status": "success"}
-    else:
-        return {"error": "Payment failed"}
+    return jsonify({'message': 'Payment successful'}), 200
