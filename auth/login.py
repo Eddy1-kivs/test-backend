@@ -18,6 +18,8 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # Create the User class
+
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
