@@ -88,4 +88,11 @@ def signup():
     session.commit()
     user = new_user
     access_token = create_access_token(identity=user.username)
-    return jsonify(access_token=access_token)
+    user_data = {
+        'username': user.username,
+        'email': user.email,
+        # 'first_name': user.first_name,
+        # 'last_name': user.last_name
+    }
+    return jsonify(access_token=access_token, user_data=user_data)
+

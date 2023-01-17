@@ -7,8 +7,7 @@
     <list default="true" id="3edddf14-701b-47cd-b2a9-2e1a98572188" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TestLoad.db" beforeDir="false" afterPath="$PROJECT_DIR$/TestLoad.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/subscriptions/payments.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/subscriptions/payments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/tests/TestOverview.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/tests/TestOverview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +86,7 @@
       <recent name="$PROJECT_DIR$/views" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.database">
     <configuration name="database" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="test-backend" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -244,27 +243,6 @@
       <workItem from="1673025863040" duration="29000" />
       <workItem from="1673030259673" duration="15665000" />
       <workItem from="1673123483286" duration="308000" />
-    </task>
-    <task id="LOCAL-00027" summary="update">
-      <created>1671684867697</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1671684867697</updated>
-    </task>
-    <task id="LOCAL-00028" summary="update">
-      <created>1672411255326</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1672411255326</updated>
-    </task>
-    <task id="LOCAL-00029" summary="update">
-      <created>1673017592698</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1673017592698</updated>
     </task>
     <task id="LOCAL-00030" summary="update">
       <created>1673022542073</created>
@@ -588,7 +566,28 @@
       <option name="project" value="LOCAL" />
       <updated>1673881946371</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="update">
+      <created>1673978770268</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1673978770268</updated>
+    </task>
+    <task id="LOCAL-00077" summary="update">
+      <created>1673979758508</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1673979758508</updated>
+    </task>
+    <task id="LOCAL-00078" summary="update">
+      <created>1673979923071</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1673979923071</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
