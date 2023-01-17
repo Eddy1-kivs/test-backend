@@ -60,8 +60,13 @@ def login():
     if user:
         # Compare password
         if bcrypt.checkpw(password.encode('utf-8'), user.password):
+            login = user
             access_token = create_access_token(identity=user.username)
-            return jsonify(access_token=access_token), 200
+            login = {
+                'id': login.id,
+                'username': login.username,
+            }
+            return jsonify(access_token=access_token, login=login), 200
         else:
             errors['password'] = 'Invalid password'
             return jsonify(errors), 400
