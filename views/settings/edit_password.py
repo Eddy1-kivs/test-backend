@@ -55,11 +55,14 @@ def change_your_password():
     confirm_password = request.get_json().get('confirm_password')
 
     if new_password != confirm_password:
-        return jsonify({'error': 'New password and confirm password do not match'}), 400
+        errors['confirm_password'] = 'New password and confirm password do not match'
 
     user = session.query(User).filter_by(user_id=user_id).one()
     if not bcrypt.checkpw(current_password.encode('utf-8'), user[2].encode('utf-8')):
-        return jsonify({'error': 'Invalid current password'}), 401
+        errors['current_password'] = 'Invalid current password'
+
+    if errors:
+        return jsonify(errors)
 
     hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
     user.password = hashed_password

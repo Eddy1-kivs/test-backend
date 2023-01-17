@@ -19,19 +19,15 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-class User(Base):
-    __tablename__ = 'users'
+class Subscriptions(Base):
+    __tablename__ = 'subscriptions'
     id = Column(Integer, primary_key=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    phone_number = Column(String)
-    username = Column(String)
-    email = Column(String)
-    password = Column(String)
-    location = Column(String)
-    img = Column(String)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    current_plan = Column(String)
+    plan_amount = Column(Float)
+    card_number = Column(String)
     created_at = Column(Date)
-    updated_at = Column(Date)
+    user = relationship("User", backref="payments")
 
 
 class Payments(Base):
@@ -44,22 +40,10 @@ class Payments(Base):
     expiration_date = Column(Date)
     cvv = Column(String)
     created_at = Column(Date)
-    user = relationship("User", backref="payments")
+    user = relationship("Subscriptions", backref="payments")
 
 
-class Subscriptions(Base):
-    __tablename__ = 'subscriptions'
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    current_plan = Column(String)
-    plan_amount = Column(Float)
-    card_number = Column(String)
-    created_at = Column(Date)
-    user = relationship("Payments", backref="payments")
-
-
-Base.metadata.create_all(engine)
-
+# Base.metadata.create_all(engine)
 def is_valid_card_number(card_number):
     # Add implementation to validate card number using luhn algorithm
     if not card_number.isdigit():
@@ -129,11 +113,7 @@ def charge():
     plan_amount = subscription.plan_amount
     card_number = subscription.card_number
 
-    # Validate the form input
-    if not all([card_number, card_holder_name, expiration_date, cvv]):
-        return {"error": "All fields are required"}
-
-        # check if the card number is valid
+    # check if the card number is valid
     if not is_valid_card_number(card_number):
         errors['card_number'] = 'Invalid card number'
 

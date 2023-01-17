@@ -7,12 +7,13 @@ from views.profile.update_profile import update_profile
 from views.logout import logout
 from views.tests.TestOverview import overview
 from auth.login import sign_in
-from flask_cors import CORS
-from flask_session import Session
 from views.subscriptions.payments import payments
 from views.subscriptions.add_subscritpion import add_subscription
 from views.subscriptions.subscription import subscription
 from views.profile.profile import user_profile
+from views.tests.run_test import run_test
+from flask_cors import CORS
+from flask_session import Session
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
@@ -33,6 +34,7 @@ app.register_blueprint(user_profile)
 app.register_blueprint(subscription)
 app.register_blueprint(add_subscription)
 app.register_blueprint(overview)
+app.register_blueprint(run_test)
 app.register_blueprint(payments)
 
 

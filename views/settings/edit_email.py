@@ -58,19 +58,25 @@ def change_your_email():
     password = request.get_json().get('password')
 
     if new_email_address != confirm_email:
-        return jsonify({'error': 'New email address and confirm email address do not match'}), 400
+        errors['confirm_email'] = 'New email address and confirm email address do not match'
     if not re.match(r"[^@]+@[^@]+\.[^@]+", new_email_address):
-        return jsonify({'error': 'Invalid email format'}), 400
+        errors['new_email_address'] = 'Invalid email format'
     if new_email_address == current_email:
-        return jsonify({'error': 'New email address is the same as current email'}), 400
+        errors['new_email_address'] = 'New email address is the same as current email'
+
+    if errors:
+        return jsonify(errors), 400
 
     user = session.query(User).filter_by(user_id=user_id).one()
     if not user:
-        return jsonify({'error': 'Invalid email'}), 401
+        errors['current_email'] = 'Invalid email'
 
     if not bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
-        return jsonify({'error': 'Invalid password'}), 401
+        errors['password'] = 'Invalid password'
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    if errors:
+        return jsonify(errors), 400
 
     edit_email = User(email=new_email_address)
     session.add(edit_email)

@@ -47,17 +47,11 @@ class Tests(Base):
     Base.metadata.create_all(engine)
 
 
-overview = Blueprint('overview', __name__)
+run_test = Blueprint('run_test', __name__)
 
 
-@overview.route('/test-overview', methods=['GET'])
+@run_test.route("/run_test", methods=["POST"])
 @jwt_required
-def test_overview():
+def test_run():
     user_id = get_jwt_identity()
-    user_tests = session.query(Tests).filter_by(user_id=user_id).all()
-    if not user_tests:
-        return jsonify({'tests': 'No tests found for this user.'})
-    return jsonify({'tests': [test.__dict__ for test in user_tests]})
-
-
-
+    return

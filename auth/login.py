@@ -1,3 +1,7 @@
+"""
+user login blueprint
+
+"""
 from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -57,7 +61,7 @@ def login():
         # Compare password
         if bcrypt.checkpw(password.encode('utf-8'), user.password):
             access_token = create_access_token(identity=user.username)
-            return jsonify(access_token=access_token), 200
+            return jsonify(access_token=access_token, user=user), 200
         else:
             errors['password'] = 'Invalid password'
             return jsonify(errors), 400

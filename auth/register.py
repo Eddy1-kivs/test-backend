@@ -83,14 +83,6 @@ def signup():
     new_user = User(username=username, email=email, password=hashed_password, created_at=created_at)
     session.add(new_user)
     session.commit()
-    session.close()
-
-    # Create an access token
-    if user:
-        access_token = create_access_token(identity=user.username)
-    else:
-        access_token = None
+    user = new_user
+    access_token = create_access_token(identity=user.username)
     return jsonify(access_token=access_token)
-
-    # except sqlite3.Error as e:
-    # return {'error': 'There was an error inserting the data'}
