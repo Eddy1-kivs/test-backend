@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import bcrypt
 import re
+# from flask_session import Session
 from flask import session
 from datetime import datetime
 from flask import Flask, request, jsonify, Blueprint
@@ -17,7 +18,9 @@ engine = create_engine('sqlite:///TestLoad.db', echo=True)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
-
+# app.config['SESSION_TYPE'] = 'sqlalchemy'
+# app.config['SESSION_SQLALCHEMY'] = engine
+# Session(app)
 # Create the User class
 
 
