@@ -44,7 +44,7 @@ class Tests(Base):
     last_run = Column(String)
     user = relationship("User", backref="tests")
 
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine)
 
 
 overview = Blueprint('overview', __name__)

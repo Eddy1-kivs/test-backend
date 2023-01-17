@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import bcrypt
 import re
-# from flask_session import Session
+from flask_session import Session
 from flask import session
 from datetime import datetime
 from flask import Flask, request, jsonify, Blueprint
