@@ -10,6 +10,7 @@ import re
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
 from flask_jwt_extended import JWTManager, create_access_token
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -61,12 +62,13 @@ def login():
         # Compare password
         if bcrypt.checkpw(password.encode('utf-8'), user.password):
             user = user
+            exp_time = datetime.utcnow() + timedelta(hours=2)
             token = create_access_token(identity=user.username)
             user = {
                 'id': user.id,
                 'username': user.username,
             }
-            return jsonify(token=token, user=user), 200
+            return jsonify(token=token, user=user, expires_delta=exp_time), 200
         else:
             errors['password'] = 'Invalid password'
             return jsonify(errors), 400

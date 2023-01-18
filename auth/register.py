@@ -6,6 +6,7 @@ import re
 from flask_session import Session
 from flask import session
 from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, create_access_token
 
@@ -87,10 +88,11 @@ def signup():
     session.add(new_user)
     session.commit()
     user = new_user
+    exp_time = datetime.utcnow() + timedelta(hours=2)
     token = create_access_token(identity=user.username)
     user = {
         'username': user.username,
         'email': user.email,
     }
-    return jsonify(token=token, user=user)
+    return jsonify(token=token, user=user, expires_delta=exp_time)
 
