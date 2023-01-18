@@ -39,7 +39,7 @@ change_email = Blueprint('change_email', __name__)
 
 
 @change_email.route('/email-change', methods=['POST'])
-@jwt_required
+@jwt_required()
 def change_your_email():
     user_id = get_jwt_identity()
 

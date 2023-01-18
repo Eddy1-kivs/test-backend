@@ -51,7 +51,7 @@ run_test = Blueprint('run_test', __name__)
 
 
 @run_test.route("/run_test", methods=["POST"])
-@jwt_required
+@jwt_required()
 def test_run():
     user_id = get_jwt_identity()
     return

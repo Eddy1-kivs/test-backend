@@ -51,7 +51,7 @@ overview = Blueprint('overview', __name__)
 
 
 @overview.route('/test-overview', methods=['GET'])
-@jwt_required
+@jwt_required()
 def test_overview():
     user_id = get_jwt_identity()
     user_tests = session.query(Tests).filter_by(user_id=user_id).all()

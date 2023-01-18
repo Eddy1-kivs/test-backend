@@ -89,7 +89,7 @@ def is_valid_cvv(cvv):
 
 
 @payments.route("/charge", methods=["POST"])
-@jwt_required
+@jwt_required()
 def charge():
     user_id = get_jwt_identity()
     errors = {}

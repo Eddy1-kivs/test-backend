@@ -48,7 +48,7 @@ billing_history = Blueprint('billing_history', __name__)
 
 
 @billing_history.route('/billing-history-view', methods=['GET'])
-@jwt_required
+@jwt_required()
 def user_billing_history():
     user_id = get_jwt_identity()
 

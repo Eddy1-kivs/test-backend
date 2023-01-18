@@ -38,7 +38,7 @@ change_password = Blueprint('change_password', __name__)
 
 
 @change_password.route('/password-change', methods=['POST'])
-@jwt_required
+@jwt_required()
 def change_your_password():
     user_id = get_jwt_identity()
     errors = {}

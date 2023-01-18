@@ -49,7 +49,7 @@ subscription = Blueprint('subscription', __name__)
 
 
 @subscription.route('/subscription', methods=['GET'])
-@jwt_required
+@jwt_required()
 def user_subscription():
     user_id = get_jwt_identity()
 

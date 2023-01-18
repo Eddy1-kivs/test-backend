@@ -53,7 +53,7 @@ add_subscription = Blueprint('add_subscription', __name__)
 
 
 @add_subscription.route('/subscription/add', methods=['POST'])
-@jwt_required
+@jwt_required()
 def subscription():
     user_id = get_jwt_identity()
     # retrieve the subscription details from the request body

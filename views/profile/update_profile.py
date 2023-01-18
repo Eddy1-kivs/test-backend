@@ -66,7 +66,7 @@ def save_image(image):
 
 
 @update_profile.route('/profile_update', methods=['POST'])
-@jwt_required
+@jwt_required()
 def update_user_profile():
     user_id = get_jwt_identity()
 
