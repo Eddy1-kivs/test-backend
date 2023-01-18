@@ -91,6 +91,7 @@ def signup():
     exp_time = datetime.utcnow() + timedelta(hours=2)
     token = create_access_token(identity=user.username)
     user = {
+        # 'id': user.id,
         'username': user.username,
         'email': user.email,
     }

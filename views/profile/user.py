@@ -32,6 +32,9 @@ class User(Base):
     created_at = Column(Date)
     updated_at = Column(Date)
 
+    Base.metadata.create_all(bind=engine)
+    echo = True
+
 
 user = Blueprint('user', __name__)
 
@@ -40,8 +43,8 @@ user = Blueprint('user', __name__)
 @jwt_required()
 def user_profile():
     user_id = get_jwt_identity()
-    user = session.query(User).filter_by(id=user_id).all()
+    user = session.query(User).filter_by(username=user_id).all()
     print(user)
     if not user:
         return jsonify({'user': 'user does not exist'})
-    return jsonify({'user': [user.__dict__ for user in user]})
+    return jsonify({'user': user})
