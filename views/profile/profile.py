@@ -36,7 +36,7 @@ class User(Base):
 user_profile = Blueprint('user_profile', __name__)
 
 
-@user_profile.route('/profile', methods=['GET'])
+@user_profile.route('/profile', methods=['POST'])
 @jwt_required()
 def profile():
     user_id = get_jwt_identity()
