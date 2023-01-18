@@ -36,8 +36,8 @@ class User(Base):
 user_profile = Blueprint('user_profile', __name__)
 
 
-@user_profile.route('/profile', methods=['POST'])
-@jwt_required
+@user_profile.route('/profile', methods=['GET'])
+@jwt_required()
 def profile():
     user_id = get_jwt_identity()
     user_profile = session.query(User).filter_by(user_id=user_id).all()
