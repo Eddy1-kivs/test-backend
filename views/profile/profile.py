@@ -40,7 +40,7 @@ user_profile = Blueprint('user_profile', __name__)
 @jwt_required()
 def profile():
     user_id = get_jwt_identity()
-    user_profile = session.query(User).filter_by(user_id=user_id).all()
+    user_profile = session.query(User).filter_by(id=user_id).all()
     if not user_profile:
         return jsonify({'profile': 'profile is not updated'})
     return jsonify({'profile': [prof.__dict__ for prof in user_profile]})
