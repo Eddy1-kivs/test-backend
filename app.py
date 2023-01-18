@@ -7,6 +7,7 @@ from views.profile.update_profile import update_profile
 from views.logout import logout
 from views.tests.TestOverview import overview
 from auth.login import sign_in
+from views.profile.user import user
 from views.subscriptions.payments import payments
 from views.subscriptions.add_subscritpion import add_subscription
 from views.subscriptions.subscription import subscription
@@ -30,6 +31,7 @@ app.register_blueprint(change_email)
 app.register_blueprint(change_password)
 app.register_blueprint(update_profile)
 app.register_blueprint(logout)
+app.register_blueprint(user)
 app.register_blueprint(user_profile)
 app.register_blueprint(subscription)
 app.register_blueprint(add_subscription)

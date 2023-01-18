@@ -47,12 +47,12 @@ class BillingHistory(Base):
 billing_history = Blueprint('billing_history', __name__)
 
 
-@billing_history.route('/billing-history-view', methods=['GET'])
+@billing_history.route('/billing-history-view', methods=['POST'])
 @jwt_required()
 def user_billing_history():
     user_id = get_jwt_identity()
 
-    billing_history = session.query(BillingHistory).filter_by(user_id=user_id).all()
+    billing_history = session.query(BillingHistory).filter_by(id=user_id).all()
     if not billing_history:
         return jsonify({'billing': 'No billings found for this user.'})
     return jsonify({'billing': [billing.__dict__ for billing in billing_history]})

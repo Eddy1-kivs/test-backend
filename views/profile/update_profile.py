@@ -9,7 +9,7 @@ import phonenumbers
 import uuid
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -83,7 +83,7 @@ def update_user_profile():
     first_name = request.get_json().get('first_name')
     last_name = request.get_json().get('last_name')
     location = request.get_json().get('location')
-    phone_number = request.get_json().get('phone_    number')
+    phone_number = request.get_json().get('phone_number')
     if not validate_phone_number(phone_number):
         errors['phone_number'] = 'Invalid phone number'
     updated_at = datetime.datetime.utcnow().isoformat()
