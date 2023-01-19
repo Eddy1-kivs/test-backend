@@ -52,17 +52,17 @@ def validate_phone_number(phone_number):
     return True
 
 
-def save_image(image):
-    if not image:
-        return None
-    try:
-        file_ext = os.path.splitext(image.filename)[1]
-        file_name = f"{str(uuid.uuid4())}{file_ext}"
-        file_path = os.path.join("/images/", file_name)
-        image.save(file_path)
-    except:
-        return None
-    return file_path
+# def save_image(image):
+#     if not image:
+#         return None
+#     try:
+#         file_ext = os.path.splitext(image.filename)[1]
+#         file_name = f"{str(uuid.uuid4())}{file_ext}"
+#         file_path = os.path.join("/images/", file_name)
+#         image.save(file_path)
+#     except:
+#         return None
+#     return file_path
 
 
 @update_profile.route('/edit-profile', methods=['POST'])
@@ -79,7 +79,7 @@ def update_user_profile():
     if errors:
         return jsonify(errors), 400
 
-    img = request.files.get('img')
+    # img = request.files.get('img')
     first_name = request.get_json().get('first_name')
     last_name = request.get_json().get('last_name')
     location = request.get_json().get('location')
@@ -92,7 +92,7 @@ def update_user_profile():
         return jsonify(errors), 400
 
     # Save the image to disk and retrieve the image file path
-    image_file_path = save_image(img)
+    # image_file_path = save_image(img)
 
     # update the user profile
     session.query(User).filter(User.id == user_id).update({
@@ -100,7 +100,7 @@ def update_user_profile():
         'last_name': last_name,
         'phone_number': phone_number,
         'location': location,
-        'img': img,
+        # 'img': img,
         'updated_at': updated_at
     })
     session.commit()
