@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
+from sqlalchemy.orm.attributes import get_history, flag_modified
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
@@ -36,11 +37,23 @@ class User(Base):
 user_profile = Blueprint('user_profile', __name__)
 
 
-@user_profile.route('/profile', methods=['POST'])
+def to_dict(obj):
+    """Convert SQLAlchemy object to dictionary"""
+    d = {}
+    for column in obj.__table__.columns:
+        value = getattr(obj, column.name)
+        d[column.name] = value
+    return d
+
+
+@user_profile.route('/profile', methods=['GET'])
 @jwt_required()
 def profile():
     user_id = get_jwt_identity()
     user_profile = session.query(User).filter_by(id=user_id).all()
     if not user_profile:
         return jsonify({'profile': 'profile is not updated'})
-    return jsonify({'profile': [prof.__dict__ for prof in user_profile]})
+    profile_list = [{k: v for k, v in to_dict(prof).items() if k not in ['password', 'created_at', 'updated_at']} for
+                    prof in user_profile]
+    return jsonify({'profile': profile_list})
+
