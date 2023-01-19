@@ -95,17 +95,14 @@ def update_user_profile():
     image_file_path = save_image(img)
 
     # update the user profile
-    print(user_id)
-    user = session.query(User).with_only_columns(
-        User.img, User.first_name, User.last_name, User.phone_number, User.location, User.updated_at
-    ).filter_by(id=user_id).first()
-    print(user)
-    user.img = image_file_path
-    user.first_name = first_name
-    user.last_name = last_name
-    user.phone_number = phone_number
-    user.location = location
-    user.updated_at = updated_at
+    session.query(User).filter(User.id == user_id).update({
+        'first_name': first_name,
+        'last_name': last_name,
+        'phone_number': phone_number,
+        'location': location,
+        'img': img,
+        'updated_at': updated_at
+    })
     session.commit()
     session.close()
     return jsonify({'success': True})
