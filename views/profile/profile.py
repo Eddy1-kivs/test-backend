@@ -55,5 +55,6 @@ def profile():
         return jsonify({'profile': 'profile is not updated'})
     profile_list = [{k: v for k, v in to_dict(prof).items() if k not in ['password', 'created_at', 'updated_at']} for
                     prof in user_profile]
+    session.close()
     return jsonify({'profile': profile_list})
 
