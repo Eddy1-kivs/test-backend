@@ -42,12 +42,16 @@ user = Blueprint('user', __name__)
 @jwt_required()
 def users():
     user = get_jwt_identity()
-    user = session.query(User.id, User.username, User.email).filter_by(id=user).first()
+    user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location).filter_by\
+        (id=user).first()
     if not user:
         return jsonify({'user': 'user does not exist'}), 400
     user_dict = {
         'id': user.id,
         'username': user.username,
-        'email': user.email
+        'email': user.email,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'location': user.location
     }
     return jsonify({'user': user_dict})
