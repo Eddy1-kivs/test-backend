@@ -38,7 +38,7 @@ class User(Base):
 user = Blueprint('user', __name__)
 
 
-@user.route('/user', methods=['GET'])
+@user.route('/user', methods=['POST'])
 @jwt_required()
 def users():
     user = get_jwt_identity()
