@@ -104,6 +104,5 @@ def update_user_profile():
         'updated_at': updated_at
     })
     session.commit()
-    session.close()
     return jsonify({'success': True})
 

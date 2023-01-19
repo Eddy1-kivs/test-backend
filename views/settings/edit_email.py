@@ -5,7 +5,7 @@ import bcrypt
 import re
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -67,13 +67,13 @@ def change_your_email():
     if errors:
         return jsonify(errors), 400
 
-    user = session.query(User).filter_by(user_id=user_id).one()
+    user = session.query(User).filter_by(id=user_id).one()
     if not user:
         errors['current_email'] = 'Invalid email'
 
-    if not bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
+    if bcrypt.checkpw(password.encode('utf-8'), user.password):
         errors['password'] = 'Invalid password'
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     if errors:
         return jsonify(errors), 400
