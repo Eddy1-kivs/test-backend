@@ -46,7 +46,7 @@ def to_dict(obj):
     return d
 
 
-@user_profile.route('/profile', methods=['POST'])
+@user_profile.route('/user', methods=['POST'])
 @jwt_required()
 def profile():
     user_id = get_jwt_identity()
