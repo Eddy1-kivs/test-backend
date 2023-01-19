@@ -32,7 +32,7 @@ class User(Base):
     created_at = Column(Date)
     updated_at = Column(Date)
 
-    Base.metadata.create_all(bind=engine)
+    # Base.metadata.create_all(bind=engine)
 
 
 user = Blueprint('user', __name__)
