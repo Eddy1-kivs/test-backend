@@ -8,5 +8,5 @@ logout = Blueprint('logout', __name__)
 @jwt_required()
 def logout_user():
     response = Response()
-    unset_jwt_cookies(request, response)
+    unset_jwt_cookies(response)
     return jsonify({'success': True})
