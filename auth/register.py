@@ -89,9 +89,9 @@ def signup():
     session.commit()
     user = new_user
     exp_time = datetime.utcnow() + timedelta(hours=2)
-    token = create_access_token(identity=user.username)
+    token = create_access_token(identity=user.id)
     user = {
-        # 'id': user.id,
+        'id': user.id,
         'username': user.username,
         'email': user.email,
     }
