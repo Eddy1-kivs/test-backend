@@ -60,6 +60,18 @@ def signup():
             errors['email'] = 'Invalid email format'
     if errors:
         return jsonify(errors), 400
+    username = request.get_json().get('username')
+    if username:
+        # Check if username is in the correct format
+        match = re.match(r'^[a-zA-Z0-9_]+$', username)
+        if not match:
+            errors['username'] = 'Invalid username format'
+
+        if len(username) < 4 or len(username) > 20:
+            errors['username'] = 'Username must be between 4 and 20 characters'
+
+        if errors:
+            return jsonify(errors), 400
 
     username = request.get_json().get('username')
     email = request.get_json().get('email')
