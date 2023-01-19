@@ -58,7 +58,7 @@ def save_image(image):
     try:
         file_ext = os.path.splitext(image.filename)[1]
         file_name = f"{str(uuid.uuid4())}{file_ext}"
-        file_path = os.path.join("/user_profile_images", file_name)
+        file_path = os.path.join("/images/", file_name)
         image.save(file_path)
     except:
         return None
@@ -79,24 +79,28 @@ def update_user_profile():
     if errors:
         return jsonify(errors), 400
 
-    image = request.files.get('image')
+    img = request.files.get('img')
     first_name = request.get_json().get('first_name')
     last_name = request.get_json().get('last_name')
     location = request.get_json().get('location')
     phone_number = request.get_json().get('phone_number')
     if not validate_phone_number(phone_number):
         errors['phone_number'] = 'Invalid phone number'
-    updated_at = datetime.datetime.utcnow().isoformat()
+    updated_at = datetime.now()
 
     if errors:
         return jsonify(errors), 400
 
     # Save the image to disk and retrieve the image file path
-    image_file_path = save_image(image)
+    image_file_path = save_image(img)
 
     # update the user profile
-    user = session.query(User).filter_by(id=user_id).first()
-    user.image = image_file_path
+    print(user_id)
+    user = session.query(User).with_only_columns(
+        User.img, User.first_name, User.last_name, User.phone_number, User.location, User.updated_at
+    ).filter_by(id=user_id).first()
+    print(user)
+    user.img = image_file_path
     user.first_name = first_name
     user.last_name = last_name
     user.phone_number = phone_number

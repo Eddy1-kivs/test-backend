@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3edddf14-701b-47cd-b2a9-2e1a98572188" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/profile/update_profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/profile/update_profile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -244,13 +244,6 @@
       <workItem from="1673025863040" duration="29000" />
       <workItem from="1673030259673" duration="15665000" />
       <workItem from="1673123483286" duration="308000" />
-    </task>
-    <task id="LOCAL-00046" summary="update">
-      <created>1673551900249</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1673551900249</updated>
     </task>
     <task id="LOCAL-00047" summary="update">
       <created>1673552542038</created>
@@ -588,7 +581,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674114940442</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="update">
+      <created>1674119021630</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1674119021630</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
