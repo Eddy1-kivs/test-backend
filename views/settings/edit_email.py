@@ -71,15 +71,18 @@ def change_your_email():
     if not user:
         errors['current_email'] = 'Invalid email'
 
-    if bcrypt.checkpw(password.encode('utf-8'), user.password):
+    if not bcrypt.checkpw(password.encode('utf-8'), user.password):
         errors['password'] = 'Invalid password'
-    # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     if errors:
         return jsonify(errors), 400
 
-    edit_email = User(email=new_email_address)
-    session.add(edit_email)
+    existing_user = session.query(User).filter_by(email=new_email_address).first()
+    if existing_user:
+        errors['new_email_address'] = 'This email address is already in use'
+        return jsonify(errors), 400
+
+    user.email = new_email_address
     session.commit()
     session.close()
 
