@@ -45,7 +45,7 @@ user = Blueprint('user', __name__)
 def users():
     user = get_jwt_identity()
     if not user:
-        return jsonify({"msg": "Invalid user"}), 300
+        return jsonify({"msg": "Invalid user"}), 302
     user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location).filter_by\
         (id=user).first()
     if not user:
