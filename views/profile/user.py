@@ -45,7 +45,8 @@ def users():
     user = get_jwt_identity()
     if not user:
         return jsonify({"msg": "Invalid user"}), 302
-    user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location).filter_by\
+    user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location,
+                         User.phone_number).filter_by\
         (id=user).first()
     session.close()
     if not user:
@@ -56,7 +57,8 @@ def users():
         'email': user.email,
         'first_name': user.first_name,
         'last_name': user.last_name,
-        'location': user.location
+        'location': user.location,
+        'phone_number': user.phone_number
     }
     return jsonify({'user': user_dict})
 
