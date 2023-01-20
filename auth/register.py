@@ -59,7 +59,7 @@ def signup():
         if not match:
             errors['email'] = 'Invalid email format'
     if errors:
-        return jsonify(errors), 302
+        return jsonify(errors), 400
     username = request.get_json().get('username')
     if username:
         # Check if username is in the correct format
@@ -71,7 +71,7 @@ def signup():
             errors['username'] = 'Username must be between 4 and 20 characters'
 
         if errors:
-            return jsonify(errors), 302
+            return jsonify(errors), 400
 
     username = request.get_json().get('username')
     email = request.get_json().get('email')
@@ -81,7 +81,7 @@ def signup():
 
     if password != password_confirmation:
         errors['passwords'] = 'passwords do not match'
-        return jsonify(errors), 302
+        return jsonify(errors), 400
 
     user = session.query(User).filter_by(username=username).first()
     if user:
@@ -90,7 +90,7 @@ def signup():
     if user:
         errors['email'] = 'Email already in use'
     if errors:
-        return jsonify(errors), 302
+        return jsonify(errors), 400
 
     # Hash the password before storing it
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())

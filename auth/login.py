@@ -52,7 +52,7 @@ def login():
             errors[field] = 'This field is required'
 
     if errors:
-        return jsonify(errors), 302
+        return jsonify(errors), 400
 
     username = request.get_json().get('username')
     password = request.get_json().get('password')
@@ -71,7 +71,7 @@ def login():
             return jsonify(token=token, user=user, expires_delta=exp_time), 200
         else:
             errors['password'] = 'Invalid password'
-            return jsonify(errors), 302
+            return jsonify(errors), 400
     else:
         errors['username'] = 'Invalid username'
-        return jsonify(errors), 302
+        return jsonify(errors), 400
