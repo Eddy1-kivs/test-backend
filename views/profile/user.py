@@ -3,6 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
+# from sqlalchemy import create_engine
+# from sqlalchemy.pool import QueuePool
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
@@ -42,6 +44,8 @@ user = Blueprint('user', __name__)
 @jwt_required()
 def users():
     user = get_jwt_identity()
+    if not user:
+        return jsonify({"msg": "Invalid user"}), 300
     user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location).filter_by\
         (id=user).first()
     if not user:
