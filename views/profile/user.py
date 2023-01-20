@@ -3,8 +3,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
-# from sqlalchemy import create_engine
-# from sqlalchemy.pool import QueuePool
+from sqlalchemy.orm import scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
@@ -12,12 +13,10 @@ app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
 # Connect to the database
-engine = create_engine('sqlite:///TestLoad.db', echo=True)
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
-
-# Create the User class
+session = scoped_session(sessionmaker(bind=engine))
+session.close()
 
 
 class User(Base):
@@ -48,6 +47,7 @@ def users():
         return jsonify({"msg": "Invalid user"}), 302
     user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location).filter_by\
         (id=user).first()
+    session.close()
     if not user:
         return jsonify({'user': 'user does not exist'}), 302
     user_dict = {

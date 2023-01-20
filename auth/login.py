@@ -9,6 +9,9 @@ import bcrypt
 import re
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
+from sqlalchemy.orm import scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 from flask_jwt_extended import JWTManager, create_access_token
 from datetime import datetime, timedelta
 
@@ -17,10 +20,11 @@ app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
 # Connect to the database
-engine = create_engine('sqlite:///TestLoad.db')
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
+session = scoped_session(sessionmaker(bind=engine))
+session.close()
+
 
 # Create the User class
 

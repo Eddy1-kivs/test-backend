@@ -7,6 +7,9 @@ from flask_session import Session
 from flask import session
 from datetime import datetime
 from datetime import datetime, timedelta
+from sqlalchemy.orm import scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, create_access_token
 
@@ -15,10 +18,11 @@ app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
 # Connect to the database
-engine = create_engine('sqlite:///TestLoad.db')
+# Connect to the database
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
+session = scoped_session(sessionmaker(bind=engine))
+session.close()
 # app.config['SESSION_TYPE'] = 'sqlalchemy'
 # app.config['SESSION_SQLALCHEMY'] = engine
 # Session(app)
