@@ -48,7 +48,7 @@ def change_your_password():
             errors[field] = 'This field is required'
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     current_password = request.get_json().get('current_password')
     new_password = request.get_json().get('new_password')

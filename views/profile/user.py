@@ -49,7 +49,7 @@ def users():
     user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location).filter_by\
         (id=user).first()
     if not user:
-        return jsonify({'user': 'user does not exist'}), 400
+        return jsonify({'user': 'user does not exist'}), 302
     user_dict = {
         'id': user.id,
         'username': user.username,

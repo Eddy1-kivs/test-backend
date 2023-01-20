@@ -50,7 +50,7 @@ def change_your_email():
             errors[field] = 'This field is required'
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     current_email = request.get_json().get('current_email')
     new_email_address = request.get_json().get('new_email_address')
@@ -65,7 +65,7 @@ def change_your_email():
         errors['new_email_address'] = 'New email address is the same as current email'
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     user = session.query(User).filter_by(id=user_id).one()
     if not user:
@@ -75,12 +75,12 @@ def change_your_email():
         errors['password'] = 'Invalid password'
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     existing_user = session.query(User).filter_by(email=new_email_address).first()
     if existing_user:
         errors['new_email_address'] = 'This email address is already in use'
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     user.email = new_email_address
     session.commit()

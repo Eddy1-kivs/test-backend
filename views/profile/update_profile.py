@@ -77,7 +77,7 @@ def update_user_profile():
             errors[field] = 'This field is required'
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     # img = request.files.get('img')
     first_name = request.get_json().get('first_name')
@@ -89,7 +89,7 @@ def update_user_profile():
     updated_at = datetime.now()
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     # Save the image to disk and retrieve the image file path
     # image_file_path = save_image(img)
