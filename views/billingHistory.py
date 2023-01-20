@@ -3,17 +3,22 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from flask import request, jsonify, Blueprint, Flask
 from datetime import datetime
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
+from flask import send_file
 from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
+from sqlalchemy.orm import scoped_session
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
 # Connect to the database
-engine = create_engine('sqlite:///TestLoad.db', echo=True)
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
+session = scoped_session(sessionmaker(bind=engine))
+session.close()
+
 
 # Create the User and Tests classes
 class User(Base):
@@ -52,32 +57,40 @@ billing_history = Blueprint('billing_history', __name__)
 def user_billing_history():
     user_id = get_jwt_identity()
 
-    billing_history = session.query(BillingHistory).filter_by(id=user_id).all()
+    billing_history = session.query(BillingHistory.id, BillingHistory.username, BillingHistory.date,
+                                    BillingHistory.details, BillingHistory.amount, BillingHistory.download)\
+        .filter_by(id=user_id).all()
     if not billing_history:
         return jsonify({'billing': 'No billings found for this user.'})
-    return jsonify({'billing': [billing.__dict__ for billing in billing_history]})
+    billing_history_list = []
+    for billing in billing_history:
+        billing_dict = {
+            'id': billing.id,
+            'username': billing.username,
+            'date': billing.date,
+            'details': billing.details,
+            'amount': billing.amount,
+            'download': billing.download
+        }
+        billing_history_list.append(billing_dict)
+    return jsonify({'billing_history': billing_history_list})
 
 
 @billing_history.route('/download-invoice-pdf', methods=['GET'])
-def download_invoice(invoice_file=None):
+@jwt_required()
+def download_invoice():
     user_id = get_jwt_identity()
     invoice_id = request.args.get('invoice_id')
 
     if not invoice_id:
         return jsonify({'error': 'Missing invoice_id'}), 400
 
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('''
-        SELECT * FROM billing_histories WHERE user_id=? AND invoice_id=?
-    ''', (user_id, invoice_id))
-    invoice = cursor.fetchone()
-    if not invoice:
+    billing_history = session.query(BillingHistory).filter_by(user_id=user_id, id=invoice_id).first()
+    if not billing_history:
         return jsonify({'error': 'Invalid invoice_id'}), 401
 
-    # Retrieve the invoice file from disk and send it to the user
     try:
-        invoice_file = invoice[4]
+        invoice_file = billing_history.download
         return send_file(invoice_file)
     except:
         return jsonify({'error': 'Error in sending invoice file'}), 500
