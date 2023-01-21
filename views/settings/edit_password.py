@@ -63,13 +63,13 @@ def change_your_password():
     if new_password == current_password:
         errors['new_password'] = 'New password should be different from the current password'
         if errors:
-            return jsonify(errors)
+            return jsonify(errors), 302
 
     if not bcrypt.checkpw(current_password.encode('utf-8'), user.password):
         errors['current_password'] = 'Current password is incorrect'
 
         if errors:
-            return jsonify(errors)
+            return jsonify(errors), 302
 
     hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
     user.password = hashed_password
