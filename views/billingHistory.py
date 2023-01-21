@@ -91,6 +91,7 @@ def download_invoice():
 
     try:
         invoice_file = billing_history.download
+        os.path.exists(invoice_file)
         return send_file(invoice_file)
     except:
         return jsonify({'error': 'Error in sending invoice file'}), 500
