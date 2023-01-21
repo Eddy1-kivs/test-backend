@@ -46,7 +46,7 @@ def users():
     if not user:
         return jsonify({"msg": "Invalid user"}), 302
     user = session.query(User.id, User.username, User.email, User.first_name, User.last_name, User.location,
-                         User.phone_number).filter_by\
+                         User.phone_number, User.img).filter_by\
         (id=user).first()
     session.close()
     if not user:
@@ -58,7 +58,8 @@ def users():
         'first_name': user.first_name,
         'last_name': user.last_name,
         'location': user.location,
-        'phone_number': user.phone_number
+        'phone_number': user.phone_number,
+        'img': user.img,
     }
     return jsonify({'user': user_dict})
 
