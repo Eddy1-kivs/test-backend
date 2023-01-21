@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>My Application</title>
 </head>
 <body>
-<form>
-  <label for="file">Select a file:</label>
-  <input type="file" id="file" name="file">
-  <input type="submit" value="Upload">
-</form>
-
+    <h1>Welcome to my application</h1>
+    <p>You are currently logged in.</p>
+    <form id="edit-image-form" enctype="multipart/form-data">
+        <input type="file" name="img" accept="image/*">
+        <input type="button" value="Update Image" onclick="updateImage()">
+    </form>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+let token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3NDMyMjU3MCwianRpIjoiMjU2ZWMzY2EtZDc2NS00MDVhLWFiNTMtNWQyZWRmNmE3NjhmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNjc0MzIyNTcwLCJleHAiOjE2NzQzMjM0NzB9.FzoeKKkCxphkJsXgPd36AIgVPucOF7AaiecTSU2sI_A'
+function updateImage() {
+    let form = document.getElementById('edit-image-form');
+    let formData = new FormData(form);
+
+    axios.post('/edit-image', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': token
+        }
+    })
+    .then(response => {
+        // Handle successful response
+        console.log(response);
+        alert("Image updated successfully!");
+    })
+    .catch(error => {
+        // Handle error
+        console.log(error);
+        alert("Error updating image. Please try again later.");
+    });
+}
+</script>
 </html>

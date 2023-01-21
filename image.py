@@ -7,7 +7,7 @@ import datetime
 import os
 import phonenumbers
 import uuid
-from flask import request, jsonify, Blueprint,  Flask, render_template
+from flask import request, jsonify, Blueprint,  Flask, render_template, redirect
 from datetime import datetime
 from sqlalchemy.orm import scoped_session
 from sqlalchemy import create_engine
@@ -42,7 +42,7 @@ class User(Base):
     updated_at = Column(Date)
 
 
-update_image = Blueprint('update_image', __name__)
+# update_image = Blueprint('update_image', __name__)
 
 
 def save_image(image):
@@ -56,6 +56,11 @@ def save_image(image):
     except:
         return None
     return file_path
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 @app.route('/edit-image', methods=['POST'])
@@ -79,5 +84,10 @@ def update_user_image():
         'img': image_file_path,
     })
     session.commit()
-    return jsonify({'success': True, 'file_path': image_file_path})
+    return redirect('/')
+    # return jsonify({'success': True, 'file_path': image_file_path})
+
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)
 

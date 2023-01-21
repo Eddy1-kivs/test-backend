@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3edddf14-701b-47cd-b2a9-2e1a98572188" name="Changes" comment="update">
+      <change afterPath="$PROJECT_DIR$/flask_session/4f5e56b86ed91653e0365b36a1da8a3c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/profile_images/252e4092-0904-42fa-a558-949313231ba8.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/profile_images/370defd6-b148-47db-b443-21386515a76b.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/profile_images/7111e31b-b447-4202-b308-9416905281fb.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/profile_images/8ff60ea3-1556-46db-9567-1ce6afa991c1.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/profile_images/df0611b3-6047-48e4-83e2-297d02b0e4e2.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestLoad.db" beforeDir="false" afterPath="$PROJECT_DIR$/TestLoad.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/2029240f6d1128be89ddc32729463129" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/2029240f6d1128be89ddc32729463129" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/6d3066ebd7b34b72849a5eb6e3aa89ec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/profile/update_image.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/profile/update_image.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +28,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -80,14 +92,14 @@
       <recent name="$PROJECT_DIR$/config" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/images" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/views/subscriptions" />
       <recent name="$PROJECT_DIR$/views/tests" />
       <recent name="$PROJECT_DIR$/views/profile" />
-      <recent name="$PROJECT_DIR$/views/settings" />
-      <recent name="$PROJECT_DIR$/views" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="test-backend" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -258,13 +270,6 @@
       <workItem from="1673025863040" duration="29000" />
       <workItem from="1673030259673" duration="15665000" />
       <workItem from="1673123483286" duration="308000" />
-    </task>
-    <task id="LOCAL-00092" summary="update">
-      <created>1674045509160</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1674045509160</updated>
     </task>
     <task id="LOCAL-00093" summary="update">
       <created>1674113560531</created>
@@ -602,7 +607,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674309738062</updated>
     </task>
-    <option name="localTasksCounter" value="141" />
+    <task id="LOCAL-00141" summary="update">
+      <created>1674311056691</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1674311056691</updated>
+    </task>
+    <option name="localTasksCounter" value="142" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
