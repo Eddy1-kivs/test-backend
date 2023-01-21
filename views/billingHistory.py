@@ -76,7 +76,7 @@ def user_billing_history():
     return jsonify(billing_history_list)
 
 
-@billing_history.route('/download-invoice-pdf', methods=['POST'])
+@billing_history.route('/download-invoice-pdf', methods=['GET'])
 @jwt_required()
 def download_invoice():
     user_id = get_jwt_identity()
