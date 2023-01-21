@@ -73,7 +73,7 @@ def user_billing_history():
             'download': billing.download
         }
         billing_history_list.append(billing_dict)
-    return jsonify({'billing_history': billing_history_list})
+    return jsonify(billing_history_list)
 
 
 @billing_history.route('/download-invoice-pdf', methods=['GET'])
