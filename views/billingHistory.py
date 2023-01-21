@@ -6,6 +6,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.pool import QueuePool
 from flask import send_file
+from fpdf import FPDF
 from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
 from sqlalchemy.orm import scoped_session
 
@@ -89,9 +90,21 @@ def download_invoice():
     if not billing_history:
         return jsonify({'error': 'Invalid invoice_id'}), 401
 
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="Welcome to my application", ln=1, align="C")
+    pdf.cell(200, 10, txt="Your Billing history", ln=1, align="C")
+    pdf.cell(200, 10, txt="Billing ID: " + str(billing_history.id), ln=1, align="L")
+    pdf.cell(200, 10, txt="Username: " + billing_history.username, ln=1, align="L")
+    pdf.cell(200, 10, txt="Date: " + str(billing_history.date), ln=1, align="L")
+    pdf.cell(200, 10, txt="Details: " + billing_history.details, ln=1, align="L")
+    pdf.cell(200, 10, txt="Amount: " + str(billing_history.amount), ln=1, align="L")
+    pdf.output("billing_history.pdf")
+
     try:
-        invoice_file = billing_history.download
-        os.path.exists(invoice_file)
-        return send_file(invoice_file)
+        # invoice_file = billing_history.download
+        # os.path.exists(invoice_file)
+        return send_file("billing_history.pdf", as_attachment=True)
     except:
         return jsonify({'error': 'Error in sending invoice file'}), 500
