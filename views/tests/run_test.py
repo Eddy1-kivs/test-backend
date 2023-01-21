@@ -10,10 +10,10 @@ app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
 # Connect to the database
-engine = create_engine('sqlite:///TestLoad.db', echo=True)
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
+session = scoped_session(sessionmaker(bind=engine))
+session.close()
 
 # Create the User and Tests classes
 class User(Base):

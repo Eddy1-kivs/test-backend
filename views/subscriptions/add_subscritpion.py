@@ -12,10 +12,10 @@ jwt = JWTManager(app)
 
 
 # Connect to the database
-engine = create_engine('sqlite:///TestLoad.db', echo=True)
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
+session = scoped_session(sessionmaker(bind=engine))
+session.close()
 
 stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
                  "LZKMsQZtuOC8gPQNj4ejE5ZzB7zql00RjNbHXD4"
