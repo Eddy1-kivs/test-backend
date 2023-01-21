@@ -51,7 +51,7 @@ def save_image(image):
     try:
         file_ext = os.path.splitext(image.filename)[1]
         file_name = f"{str(uuid.uuid4())}{file_ext}"
-        file_path = os.path.join("/images/", file_name)
+        file_path = os.path.join("images/", file_name)
         image.save(file_path)
     except:
         return None
