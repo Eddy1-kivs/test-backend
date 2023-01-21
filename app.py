@@ -14,6 +14,7 @@ from views.subscriptions.subscription import subscription
 from views.profile.profile import user_profile
 from views.profile.update_image import update_image
 from views.tests.run_test import run_test
+from views.subscriptions.payment_method import payment_methods
 from flask_cors import CORS
 from flask_session import Session
 from flask_jwt_extended import JWTManager
@@ -40,6 +41,7 @@ app.register_blueprint(add_subscription)
 app.register_blueprint(overview)
 app.register_blueprint(run_test)
 app.register_blueprint(payments)
+app.register_blueprint(payment_methods)
 
 
 if __name__ == "__main__":

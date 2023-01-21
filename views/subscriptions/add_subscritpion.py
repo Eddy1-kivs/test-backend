@@ -49,29 +49,52 @@ class Subscriptions(Base):
     user = relationship("User", backref="subscriptions")
 
 
+class Payments(Base):
+    __tablename__ = 'payments'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    username = Column(String)
+    card_number = Column(String)
+    card_holder_name = Column(String)
+    expiration_date = Column(Date)
+    cvv = Column(String)
+    created_at = Column(Date)
+    user = relationship("Subscriptions", backref="payments")
+
+
 add_subscription = Blueprint('add_subscription', __name__)
 
 
-@add_subscription.route('/subscription/add', methods=['POST'])
+@add_subscription.route('/process_payment', methods=['POST'])
+@jwt_required
+def process_payment():
+    plan_id = request.get_json().get('plan_id')
+    subscription = session.query(Subscriptions).filter_by(id=plan_id).first()
+    plan_amount = subscription.plan_amount
+    if not payment:
+        return jsonify({'message': 'Invalid payment method.'}), 400
+
+    # Retrieve the subscription plan amount
+    subscription = session.query(Subscriptions).filter_by(user_id=user_id).first()
+    plan_amount = subscription.plan_amount
+
+    # Process the payment using Stripe
+    try:
+        charge = stripe.Charge.create(
+            amount=plan_amount,
+            currency='usd',
+            source=payment.card_number,
+            description='Payment for subscription plan'
+        )
+        return jsonify({'message': 'Payment processed successfully.'})
+    except stripe.error.CardError as e:
+        return jsonify({'message': e.json_body['error']['message']}), 400
+
+
+@add_subscription.route('/payment_methods', methods=['GET'])
 @jwt_required()
-def subscription():
+def payment_queries():
     user_id = get_jwt_identity()
-    # retrieve the subscription details from the request body
-    current_plan = request.get_json().get('current_plan')
-    plan_amount = request.get_json().get('plan_amount')
-    card_number = request.get_json().get('card_number')
-    created_at = datetime.utcnow()
-
-    # create a new subscription object
-    new_subscription = Subscriptions(user_id=user_id,
-                                     current_plan=current_plan,
-                                     plan_amount=plan_amount,
-                                     card_number=card_number,
-                                     created_at=created_at)
-    # add the subscription to the session
-    session.add(new_subscription)
-    # commit the transaction
-    session.commit()
-
-    return jsonify({'message': 'New subscription added successfully.'})
-
+    payments = session.query(Payments.id, Payments.card_number, Payments.card_holder_name, Payments.expiration_date, Payments.cvv).filter_by(user_id=user_id).all()
+    subscription = session.query(Subscriptions.id, Subscriptions.current_plan, Subscriptions.plan_amount).filter_by(user_id=user_id).first()
+    return jsonify(payments=payments, subscription=subscription)
