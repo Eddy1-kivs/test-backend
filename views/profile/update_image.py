@@ -70,7 +70,7 @@ def update_user_image():
     image_file_path = save_image(img)
 
     session.query(User).filter(User.id == user_id).update({
-        'img': img,
+        'img': image_file_path,
     })
     session.commit()
     return jsonify({'success': True})
