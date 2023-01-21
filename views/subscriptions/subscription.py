@@ -44,27 +44,31 @@ class Subscriptions(Base):
     user = relationship("User", backref="subscriptions")
 
 
-
-
 # Base.metadata.create_all(engine)
 subscription = Blueprint('subscription', __name__)
 
 
-@subscription.route('/subscription', methods=['GET'])
+@subscription.route('/subscription', methods=['POST'])
 @jwt_required()
 def user_subscription():
     user_id = get_jwt_identity()
 
-    user_subscriptions = session.query(Subscriptions).filter_by(user_id=user_id).all()
+    user_subscriptions = session.query(Subscriptions.id, Subscriptions.current_plan, Subscriptions.plan_amount,
+                                       Subscriptions.card_number, Subscriptions.created_at).\
+        filter_by(user_id=user_id).all()
     if not user_subscriptions:
         return jsonify({'error': 'Subscription not found'}), 404
 
-    return jsonify({
-        'current_plan': user_subscriptions[1],
-        'plan_amount': user_subscriptions[2],
-        'card_number': user_subscriptions[3],
-        'created_at': user_subscriptions[4],
-    })
-
+    users_subscriptions = []
+    for sub in user_subscriptions:
+        sub_dict = {
+            'id': sub.id,
+            'current_plan': sub.current_plan,
+            'plan_amount': sub.plan_amount,
+            'card_number': sub.card_number,
+            'created_at': sub.created_at,
+        }
+        users_subscriptions.append(sub_dict)
+    return jsonify({'user_subscriptions': users_subscriptions})
 
 
