@@ -10,6 +10,10 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
+stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
+                 "LZKMsQZtuOC8gPQNj4ejE5ZzB7zql00RjNbHXD4"
+
+
 payments = Blueprint('payments', __name__)
 
 # Connect to the database
@@ -19,28 +23,31 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-class Subscriptions(Base):
-    __tablename__ = 'subscriptions'
+class User(Base):
+    __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    current_plan = Column(String)
-    plan_amount = Column(Float)
-    card_number = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
+    phone_number = Column(String)
+    username = Column(String)
+    email = Column(String)
+    password = Column(String)
+    location = Column(String)
+    img = Column(String)
     created_at = Column(Date)
-    user = relationship("User", backref="payments")
+    updated_at = Column(Date)
 
 
 class Payments(Base):
     __tablename__ = 'payments'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    username = Column(String)
     card_number = Column(String)
     card_holder_name = Column(String)
-    expiration_date = Column(Date)
+    expiration_date = Column(String)
     cvv = Column(String)
     created_at = Column(Date)
-    user = relationship("Subscriptions", backref="payments")
+    user = relationship("User", backref="payments")
 
 
 # Base.metadata.create_all(engine)
@@ -88,32 +95,26 @@ def is_valid_cvv(cvv):
     return True
 
 
-@payments.route("/charge", methods=["POST"])
+@payments.route("/add-card", methods=["POST"])
 @jwt_required()
 def charge():
     user_id = get_jwt_identity()
     errors = {}
-    required_fields = ['card_holder_name', 'expiration_date', 'cvv']
+    required_fields = ['card_holder_name', 'expiration_date', 'cvv', 'card_number']
     for field in required_fields:
-        if not request.form.get(field):
+        if not request.get_json().get(field):
             errors[field] = 'This field is required'
 
     if errors:
         return jsonify(errors), 400
 
     # Get the payment details from the form
-    card_number = request.get_json().get("card_number")
+    card_number = str(request.get_json().get("card_number"))
     card_holder_name = request.get_json().get("card_holder_name")
     expiration_date = request.get_json().get("expiration_date")
-    cvv = request.form.get("cvv")
-    user_subscription = session.query(Subscriptions).filter_by(user_id=user_id).first()
-    if not user_subscription:
-        errors['subscription'] = 'Subscription not found'
-        return jsonify(errors), 400
-    plan_amount = subscription.plan_amount
-    card_number = subscription.card_number
+    cvv = str(request.get_json().get("cvv"))
+    created_at = datetime.now()
 
-    # check if the card number is valid
     if not is_valid_card_number(card_number):
         errors['card_number'] = 'Invalid card number'
 
@@ -128,32 +129,27 @@ def charge():
     if errors:
         return jsonify(errors), 400
 
-    stripe.api_key = "pk_test_51MJWptKo6hjiMLcCn4CA6v4TEGkLzRzZ4r2rr3b93wLsPZ35YV0suqbcnQ3" \
-                     "LZKMsQZtuOC8gPQNj4ejE5ZzB7zql00RjNbHXD4"
+    new_card = Payments(
+        user_id=user_id,
+        # username=username,
+        card_number=card_number,
+        card_holder_name=card_holder_name,
+        expiration_date=expiration_date,
+        cvv=cvv,
+        created_at=datetime.now()
+    )
+    session.add(new_card)
+    session.commit()
 
-    # Create the charge using Stripe
-    try:
-        charge = stripe.Charge.create(
-            amount=plan_amount,
-            currency='usd',
-            source=card_number,
-            description='Charge for subscription'
-        )
-    except stripe.error.CardError as e:
-        return jsonify({'error': e.json_body['error']['message']}), e.http_status
-    except stripe.error.RateLimitError as e:
-        return jsonify({'error': 'Too many requests, try again later'}), e.http_status
-    except stripe.error.InvalidRequestError as e:
-        return jsonify({'error': 'Invalid parameters'}), e.http_status
-    except stripe.error.AuthenticationError as e:
-        return jsonify({'error': 'Authentication error'}), e.http_status
-    except stripe.error.APIConnectionError as e:
-        return jsonify({'error': 'Network error'}), e.http_status
-    except stripe.error.StripeError as e:
-        return jsonify({'error': 'Unknown error'}), e.http_status
+    card = new_card
+    card = {
+        'id': card.id,
+        'card_number': card.card_number,
+        'card_holder_name': card.card_holder_name,
+        'expiration_date': card.expiration_date,
+        'cvv': card.cvv,
+        'created_at': card.created_at,
+    }
 
-    if charge.status == 'succeeded':
-        return jsonify({'message': 'Payment successful'})
-    else:
-        return jsonify({'error': 'Payment failed'}), 400
+    return jsonify(card=card)
 
