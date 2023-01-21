@@ -63,6 +63,13 @@ def save_image(image):
 def update_user_image():
     user_id = get_jwt_identity()
     errors = {}
+    required_fields = ['img']
+    for field in required_fields:
+        if not request.files.get(field):
+            errors[field] = 'image is required'
+
+    if errors:
+        return jsonify(errors), 302
 
     img = request.files.get('img')
 
