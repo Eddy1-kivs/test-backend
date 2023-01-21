@@ -3,6 +3,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from flask import request, jsonify, Blueprint, Flask
 from datetime import datetime
+from sqlalchemy.orm import scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
 
 app = Flask(__name__)
