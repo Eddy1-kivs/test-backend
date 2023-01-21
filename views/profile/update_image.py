@@ -80,3 +80,4 @@ def update_user_image():
     })
     session.commit()
     return jsonify({'success': True, 'file_path': image_file_path})
+
