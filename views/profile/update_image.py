@@ -1,11 +1,9 @@
 from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import bcrypt
 import re
-import datetime
 import os
-import phonenumbers
+from flask import send_from_directory
 import uuid
 from flask import request, jsonify, Blueprint,  Flask, render_template
 from datetime import datetime
@@ -58,7 +56,12 @@ def save_image(image):
     return file_path
 
 
-@app.route('/edit-image', methods=['POST'])
+@update_image.route('/images/<path:path>')
+def send_images(path):
+    return send_from_directory('images', path)
+
+
+@update_image.route('/edit-image', methods=['POST'])
 @jwt_required()
 def update_user_image():
     user_id = get_jwt_identity()

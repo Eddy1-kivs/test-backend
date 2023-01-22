@@ -71,7 +71,7 @@ def test_overview():
             'last_run': test.last_run,
         }
         user_tests_list.append(test_dict)
-    return jsonify({'user_tests': user_tests_list})
+    return jsonify(user_tests_list)
 
 
 @overview.route('/delete-test', methods=['DELETE'])
