@@ -26,7 +26,6 @@ session = scoped_session(sessionmaker(bind=engine))
 session.close()
 
 
-
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -110,7 +109,7 @@ def charge():
             errors[field] = 'This field is required'
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     # Get the payment details from the form
     card_number = str(request.get_json().get("card_number"))
@@ -131,7 +130,7 @@ def charge():
         errors['cvv'] = 'Invalid CVV'
 
     if errors:
-        return jsonify(errors), 400
+        return jsonify(errors), 302
 
     new_card = Payments(
         user_id=user_id,
