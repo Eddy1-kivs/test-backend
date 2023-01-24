@@ -86,25 +86,24 @@ def download_invoice():
     if not invoice_id:
         return jsonify({'error': 'Missing invoice_id'}), 400
 
-    billing_history = session.query(BillingHistory).filter_by(user_id=user_id, id=invoice_id).first()
+    billing_history = session.query(BillingHistory.id, BillingHistory.username, BillingHistory.date,
+                                    BillingHistory.details,
+                                    BillingHistory.amount).filter_by(user_id=user_id, id=invoice_id).first()
+
     if not billing_history:
         return jsonify({'error': 'Invalid invoice_id'}), 401
 
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt="Welcome to my application", ln=1, align="C")
-    pdf.cell(200, 10, txt="Your Billing history", ln=1, align="C")
-    pdf.cell(200, 10, txt="Billing ID: " + str(billing_history.id), ln=1, align="L")
-    pdf.cell(200, 10, txt="Username: " + billing_history.username, ln=1, align="L")
-    pdf.cell(200, 10, txt="Date: " + str(billing_history.date), ln=1, align="L")
-    pdf.cell(200, 10, txt="Details: " + billing_history.details, ln=1, align="L")
-    pdf.cell(200, 10, txt="Amount: " + str(billing_history.amount), ln=1, align="L")
+    pdf.cell(200, 10, txt="Your Billing history", ln=0, align="C")
+    pdf.cell(200, 10, txt="Billing ID: " + str(billing_history.id), ln=0, align="L")
+    pdf.cell(200, 10, txt="Username: " + billing_history.username, ln=0, align="L")
+    pdf.cell(200, 10, txt="Date: " + str(billing_history.date), ln=0, align="L")
+    pdf.cell(200, 10, txt="Details: " + billing_history.details, ln=0, align="L")
+    pdf.cell(200, 10, txt="Amount: " + str(billing_history.amount), ln=0, align="L")
     pdf.output("billing_history.pdf")
-
     try:
-        # invoice_file = billing_history.download
-        # os.path.exists(invoice_file)
         return send_file("billing_history.pdf", as_attachment=True)
     except:
         return jsonify({'error': 'Error in sending invoice file'}), 500
