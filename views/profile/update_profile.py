@@ -19,7 +19,7 @@ app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
 # Connect to the database
-engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=200, max_overflow=100)
 Base = declarative_base()
 session = scoped_session(sessionmaker(bind=engine))
 session.close()
