@@ -33,6 +33,7 @@ class User(Base):
     created_at = Column(Date)
     updated_at = Column(Date)
 
+
 class Tests(Base):
     __tablename__ = 'tests'
     id = Column(Integer, primary_key=True)

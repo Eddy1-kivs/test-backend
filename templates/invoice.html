@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Invoice</title>
+  </head>
+  <body>
+    {% if error %}
+      <p>{{ error }}</p>
+    {% else %}
+    <h1>Invoice</h1>
+    <p>Invoice ID: {{ invoice.id }}</p>
+    <p>Username: {{ invoice.username }}</p>
+    <p>Date: {{ invoice.date }}</p>
+    <p>Details: {{ invoice.details }}</p>
+    <p>Amount: {{ invoice.amount }}</p>
+    <a href="{{ invoice.download }}" download>Download</a>
+    {% endif %}
+  </body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+let token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3NDU1OTA2MywianRpIjoiZDIzYTVmMDItNjdlNy00Nzg4LWJmNWEtNTkzMzU4NzBlYWI1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNjc0NTU5MDYzLCJleHAiOjE2NzQ1NjYyNjN9.mQUhLSuotw05DV2Xq0tetJ3Reow6W-wcbFaY6rUFh-U'
+function updateImage() {
+    let form = document.getElementById('edit-image-form');
+    let formData = new FormData(form);
+
+    axios.post('/edit-image', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': token
+        }
+    })
+    .then(response => {
+        // Handle successful response
+        console.log(response);
+        alert("Image updated successfully!");
+    })
+    .catch(error => {
+        // Handle error
+        console.log(error);
+        alert("Error updating image. Please try again later.");
+    });
+}
+</script>
+</html>
