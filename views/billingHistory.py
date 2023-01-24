@@ -103,3 +103,4 @@ def download_invoice():
         return send_file("billing_history.pdf", as_attachment=True)
     except:
         return jsonify({'error': 'Error in sending invoice file'}), 500
+
