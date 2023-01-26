@@ -73,7 +73,7 @@ def test_overview():
     return jsonify(user_tests_list)
 
 
-@overview.route('/delete-test', methods=['DELETE'])
+@overview.route('/delete-test', methods=['POST'])
 @jwt_required()
 def delete_test():
     user_id = get_jwt_identity()
