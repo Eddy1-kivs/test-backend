@@ -1,51 +1,10 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, Date, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
 from flask import request, jsonify, Blueprint, Flask
 from datetime import datetime
-from sqlalchemy.orm import scoped_session
-from sqlalchemy import create_engine
-from sqlalchemy.pool import QueuePool
 from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
-
+from config import *
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
-
-# Connect to the database
-engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
-Base = declarative_base()
-session = scoped_session(sessionmaker(bind=engine))
-session.close()
-
-
-# Create the User and Subscriptions classes
-
-
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    phone_number = Column(String)
-    username = Column(String)
-    email = Column(String)
-    password = Column(String)
-    location = Column(String)
-    img = Column(String)
-    created_at = Column(Date)
-    updated_at = Column(Date)
-
-
-class Subscriptions(Base):
-    __tablename__ = 'subscriptions'
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    current_plan = Column(String)
-    plan_amount = Column(Float)
-    card_number = Column(String)
-    created_at = Column(Date)
-    user = relationship("User", backref="subscriptions")
 
 
 # Base.metadata.create_all(engine)

@@ -1,47 +1,16 @@
-from sqlalchemy import create_engine, Column, Integer, String, Date
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 import bcrypt
 import re
 from flask_session import Session
 from flask import session
 from datetime import datetime
 from datetime import datetime, timedelta
-from sqlalchemy.orm import scoped_session
-from sqlalchemy import create_engine
-from sqlalchemy.pool import QueuePool
 from flask import Flask, request, jsonify, Blueprint
+from config import *
 from flask_jwt_extended import JWTManager, create_access_token
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
-
-# Connect to the database
-# Connect to the database
-engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
-Base = declarative_base()
-session = scoped_session(sessionmaker(bind=engine))
-session.close()
-# app.config['SESSION_TYPE'] = 'sqlalchemy'
-# app.config['SESSION_SQLALCHEMY'] = engine
-# Session(app)
-# Create the User class
-
-
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    phone_number = Column(String)
-    username = Column(String)
-    email = Column(String)
-    password = Column(String)
-    location = Column(String)
-    img = Column(String)
-    created_at = Column(Date)
-    updated_at = Column(Date)
 
 
 get_started = Blueprint('get_started', __name__)
@@ -115,5 +84,3 @@ def signup():
         'email': user.email,
     }
     return jsonify(token=token, user=user, expires_delta=exp_time)
-
-
