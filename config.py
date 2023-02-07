@@ -5,10 +5,8 @@ from sqlalchemy.pool import QueuePool
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-import psycopg2
 
-
-engine = create_engine('postgres://cjqqqqqz:0g3pGJl5NXj58Hzf17llME_WAblPxWbI@kashin.db.elephantsql.com/cjqqqqqz', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
+engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
 session = scoped_session(sessionmaker(bind=engine))
 session.close()
@@ -90,5 +88,3 @@ class BillingHistory(Base):
     download = Column(String)
     user = relationship("User", backref="billing_histories")
 
-
-Base.metadata.create_all(engine)
