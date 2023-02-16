@@ -22,7 +22,15 @@ from flask_jwt_extended import JWTManager
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
-CORS(app)
+cors = CORS(app, resources={
+    r"/*": {
+        "origins": "*",
+        "methods": "*",
+        "headers": "*",
+        "expose_headers": "*",
+        "supports_credentials": True
+    }
+})
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 

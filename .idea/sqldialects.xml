@@ -4,10 +4,7 @@
     <file url="file://$PROJECT_DIR$/app.py" dialect="SQLite" />
     <file url="file://$PROJECT_DIR$/auth/login.py" dialect="SQLite" />
     <file url="file://$PROJECT_DIR$/auth/register.py" dialect="SQLite" />
-    <file url="file://$PROJECT_DIR$/views/TestOverview.py" dialect="SQLite" />
     <file url="file://$PROJECT_DIR$/views/billingHistory.py" dialect="SQLite" />
     <file url="file://$PROJECT_DIR$/views/logout.py" dialect="SQLite" />
-    <file url="file://$PROJECT_DIR$/views/payments.py" dialect="SQLite" />
-    <file url="file://$PROJECT_DIR$/views/subscription.py" dialect="SQLite" />
   </component>
 </project>

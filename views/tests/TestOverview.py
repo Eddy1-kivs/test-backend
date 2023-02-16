@@ -17,7 +17,7 @@ def test_overview():
     user_id = get_jwt_identity()
     user_tests = session.query(Tests.id, Tests.test_url, Tests.start_date, Tests.total_runs, Tests.last_run).filter_by(id=user_id).all()
     if not user_tests:
-        return jsonify({'tests': 'No tests found for this user.'})
+        return jsonify({'tests': False})
     user_tests_list = []
     for test in user_tests:
         test_dict = {
