@@ -22,18 +22,9 @@ from flask_jwt_extended import JWTManager
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
-CORS(app)
+CORS(app, origins='*')
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
-
-ALLOWED_HOSTS = ['*'],
-ALLOWED_METHODS = ['*'],
-ALLOWED_ORIGINS = ['*'],
-ALLOWED_ORIGINS_PATTERNS = ['*'],
-ALLOWED_HEADERS = ['*'],
-EXPOSED_HEADERS = ['*'],
-SUPPORTS_CREDENTIALS = True
-
 
 app.register_blueprint(get_started)
 app.register_blueprint(sign_in)
