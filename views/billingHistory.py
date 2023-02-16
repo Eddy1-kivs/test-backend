@@ -22,7 +22,7 @@ def user_billing_history():
                                     BillingHistory.details, BillingHistory.amount, BillingHistory.download)\
         .filter_by(id=user_id).all()
     if not billing_history:
-        return jsonify({'billing': False})
+        return []
     billing_history_list = []
     for billing in billing_history:
         billing_dict = {

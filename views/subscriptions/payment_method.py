@@ -18,7 +18,7 @@ def payment_queries():
     payments = session.query(Payments.id, Payments.card_number, Payments.card_holder_name, Payments.expiration_date,
                              Payments.cvv, Payments.created_at).filter_by(user_id=user_id).all()
     if not payments:
-        return jsonify({'tests': False})
+        return []
     user_payment_methods = []
     for payment in payments:
         payment_dict = {
