@@ -5,16 +5,19 @@ from sqlalchemy.pool import QueuePool
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
+import uuid
 
-engine = create_engine('sqlite:///TestLoad.db', echo=True, poolclass=QueuePool, pool_size=5, max_overflow=10)
+engine = create_engine('sqlite:///TestLoad.db', poolclass=QueuePool, pool_size=5, max_overflow=10)
 Base = declarative_base()
 session = scoped_session(sessionmaker(bind=engine))
 session.close()
 
+# echo=true
+
 
 class User(Base):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True, default=str(uuid.uuid4()))
     first_name = Column(String)
     last_name = Column(String)
     phone_number = Column(String)
@@ -72,7 +75,7 @@ class Tests(Base):
     test_url = Column(String)
     results = Column(String)
     start_date = Column(String)
-    total_runs = Column(String)
+    total_runs = Column(Integer)
     last_run = Column(String)
     user = relationship("User", backref="tests")
 
@@ -88,3 +91,5 @@ class BillingHistory(Base):
     download = Column(String)
     user = relationship("User", backref="billing_histories")
 
+
+Base.metadata.create_all(engine)

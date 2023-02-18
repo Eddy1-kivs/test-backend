@@ -5,7 +5,7 @@ from flask import session
 from datetime import datetime
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, Blueprint
-from config import *
+from models import *
 from flask_jwt_extended import JWTManager, create_access_token
 
 app = Flask(__name__)

@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint, Flask
 from datetime import datetime
-from config import *
+from models import *
 from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
 
 app = Flask(__name__)

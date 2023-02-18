@@ -8,7 +8,7 @@ from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
 from flask_jwt_extended import JWTManager, create_access_token
 from datetime import datetime, timedelta
-from config import *
+from models import *
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'

@@ -6,7 +6,7 @@ import phonenumbers
 import uuid
 from flask import request, jsonify, Blueprint,  Flask
 from datetime import datetime
-from config import *
+from models import *
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
