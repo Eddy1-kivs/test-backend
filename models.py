@@ -3,9 +3,9 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.pool import QueuePool
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, Float
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 import uuid
+from sqlalchemy.orm import declarative_base
 
 engine = create_engine('sqlite:///TestLoad.db', poolclass=QueuePool, pool_size=10, max_overflow=20)
 Base = declarative_base()
@@ -92,5 +92,5 @@ class BillingHistory(Base):
     user = relationship("User", backref="billing_histories")
 
 
-# Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
