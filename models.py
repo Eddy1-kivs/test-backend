@@ -9,7 +9,7 @@ from sqlalchemy.orm import declarative_base
 
 engine = create_engine('sqlite:///TestLoad.db', poolclass=QueuePool, pool_size=10, max_overflow=20)
 Base = declarative_base()
-session = scoped_session(sessionmaker(bind=engine))
+session = sessionmaker(bind=engine)
 session.close()
 
 # echo=true
@@ -92,5 +92,4 @@ class BillingHistory(Base):
     user = relationship("User", backref="billing_histories")
 
 
-Base.metadata.create_all(engine)
-
+# Base.metadata.create_all(engine)
