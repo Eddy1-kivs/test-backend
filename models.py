@@ -12,6 +12,7 @@ Base = declarative_base()
 session = scoped_session(sessionmaker(bind=engine))
 session.close()
 
+
 # echo=true
 
 
