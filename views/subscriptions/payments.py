@@ -35,8 +35,9 @@ def luhn(card_number):
     checksum = 0
     checksum += sum(odd_digits)
     for d in even_digits:
-        checksum += sum(digits_of(d*2))
-    return checksum % 10
+        for digit in digits_of(d*2):
+            checksum += digit
+    return checksum % 10 == 0 and len(digits) >= 13
 
 
 def is_valid_expiration_date(expiration_date):
