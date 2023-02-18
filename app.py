@@ -20,9 +20,9 @@ from flask_session import Session
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
-CORS(app, origins='*')
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
