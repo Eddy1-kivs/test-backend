@@ -8,9 +8,9 @@ from flask import Flask, request, jsonify, Blueprint
 from models import *
 from flask_jwt_extended import JWTManager, create_access_token
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'
-jwt = JWTManager(app)
+# app = Flask(__name__)
+# app.secret_key = 'your_secret_key'
+# jwt = JWTManager(app)
 
 
 get_started = Blueprint('get_started', __name__)

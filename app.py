@@ -16,13 +16,10 @@ from views.profile.update_image import update_image
 from views.tests.run_test import run_test
 from views.subscriptions.payment_method import payment_methods
 from flask_cors import CORS
-from flask_session import Session
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
 app.secret_key = 'your_secret_key'
 jwt = JWTManager(app)
 
