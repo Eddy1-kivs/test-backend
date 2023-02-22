@@ -20,7 +20,7 @@ from flask_session import Session
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*", "supports_credentials": True}})
+CORS(app, origins=['http://localhost:3000'], supports_credentials=True))
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 app.secret_key = 'your_secret_key'
